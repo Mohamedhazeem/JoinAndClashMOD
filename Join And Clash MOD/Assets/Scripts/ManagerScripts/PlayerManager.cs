@@ -5,15 +5,22 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager instance;
-    //public LayerMask layerMask;
+    
     [Header("Player Spawn Point")]
-    [SerializeField] Transform playerSpawnPoint;
+    [SerializeField]private Transform playerSpawnPoint;
     [Header("Players")]
-    [SerializeField] GameObject player;
+    [SerializeField]private GameObject player;
 
     internal GameObject currentPlayer;
-
-    public PlayerStates playerStates;
+    public enum PlayerStates
+    {
+        Idle,
+        Running,
+        Attack,
+        Win,
+        Die
+    }
+    public PlayerStates currentPlayerStates;
     private void Awake()
     {
         AssignInstance();
@@ -30,15 +37,21 @@ public class PlayerManager : MonoBehaviour
             Destroy(this);
         }
     }
+    private void Start()
+    {
+        currentPlayerStates = PlayerStates.Idle;
+    }
     public void SwitchPlayerState()
     {
-        switch (playerStates)
+        switch (currentPlayerStates)
         {
             case PlayerStates.Idle:
-                playerStates = PlayerStates.Running;
+                currentPlayerStates = PlayerStates.Running;
+                Debug.Log("W");
                 break;
 
             case PlayerStates.Running:
+                currentPlayerStates = PlayerStates.Idle;
                 break;
 
             case PlayerStates.Attack:
@@ -48,19 +61,7 @@ public class PlayerManager : MonoBehaviour
                 break;
 
             case PlayerStates.Die:
-                break;
-
-            default:
-                playerStates = PlayerStates.Idle;
-                break;
+                break;           
         }
     }
-}
-public enum PlayerStates
-{
-    Idle,
-    Running,
-    Attack,
-    Win,
-    Die
 }

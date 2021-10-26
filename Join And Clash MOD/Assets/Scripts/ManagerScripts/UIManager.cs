@@ -10,9 +10,10 @@ public class UIManager : MonoBehaviour
         BeforeStart,
         Started
     }
-    public MenuState currentMenuState;
+    internal MenuState currentMenuState;
 
-    public GameObject HoldAndDrag_Text;
+    [Header("Hold And Drag GameObject")]
+    [SerializeField]private GameObject HoldAndDrag_Text;
 
     private void Awake()
     {
@@ -21,6 +22,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         currentMenuState = MenuState.BeforeStart;
+        HoldAndDrag_Text.SetActive(true);
     }
     private void AssignInstance()
     {
@@ -40,9 +42,12 @@ public class UIManager : MonoBehaviour
         {
             case MenuState.BeforeStart:
                 currentMenuState = MenuState.Started;
+                HoldAndDrag_Text.SetActive(false);
                 break;
 
             case MenuState.Started:
+                currentMenuState = MenuState.BeforeStart;
+                HoldAndDrag_Text.SetActive(true);
                 break;
 
             default:
