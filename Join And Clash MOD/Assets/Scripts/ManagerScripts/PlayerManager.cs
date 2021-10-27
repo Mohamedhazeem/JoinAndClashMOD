@@ -3,24 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
-{
+{ 
     public static PlayerManager instance;
     
     [Header("Player Spawn Point")]
     [SerializeField]private Transform playerSpawnPoint;
     [Header("Players")]
     [SerializeField]private GameObject player;
-
+    public Material playerMaterial;
     internal GameObject currentPlayer;
-    public enum PlayerStates
-    {
-        Idle,
-        Running,
-        Attack,
-        Win,
-        Die
-    }
+
     public PlayerStates currentPlayerStates;
+    
     private void Awake()
     {
         AssignInstance();
@@ -64,4 +58,12 @@ public class PlayerManager : MonoBehaviour
                 break;           
         }
     }
+}
+public enum PlayerStates
+{
+    Idle,
+    Running,
+    Attack,
+    Win,
+    Die
 }

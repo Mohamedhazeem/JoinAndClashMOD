@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
@@ -16,9 +14,8 @@ public class InputManager : MonoBehaviour
     [SerializeField] private Camera orthographicCamera;
 
     private Vector3 MouseStartPosition;
-     private Vector3 MouseCurrentPosition;
+    private Vector3 MouseCurrentPosition;
 
-   
     private void Awake()
     {
         AssignInstance();
@@ -36,13 +33,17 @@ public class InputManager : MonoBehaviour
     }
     void Update()
     {
-        if(GameManager.instance.currentGameState == GameManager.GameState.Menu && UIManager.instance.currentMenuState == UIManager.MenuState.BeforeStart && PlayerManager.instance.currentPlayerStates == PlayerManager.PlayerStates.Idle && Input.GetMouseButtonDown(0))
+        HoldAndDrag();
+    }
+    private void HoldAndDrag()
+    {
+        if (GameManager.instance.currentGameState == GameManager.GameState.Menu && UIManager.instance.currentMenuState == UIManager.MenuState.BeforeStart && PlayerManager.instance.currentPlayerStates == PlayerStates.Idle && Input.GetMouseButtonDown(0))
         {
             GameManager.instance.SwitchState();
             UIManager.instance.SwitchUiState();
         }
 
-        if (GameManager.instance.currentGameState == GameManager.GameState.GamePlay && PlayerManager.instance.currentPlayerStates == PlayerManager.PlayerStates.Idle && Input.GetMouseButtonDown(0))
+        if (GameManager.instance.currentGameState == GameManager.GameState.GamePlay && PlayerManager.instance.currentPlayerStates == PlayerStates.Idle && Input.GetMouseButtonDown(0))
         {
             PlayerManager.instance.SwitchPlayerState();
             OnMouseDown?.Invoke();
@@ -50,7 +51,7 @@ public class InputManager : MonoBehaviour
             MouseStartPosition.y = PlayerManager.instance.currentPlayer.transform.position.y;
 
         }
-        else if (Input.GetMouseButton(0) && GameManager.instance.currentGameState == GameManager.GameState.GamePlay && PlayerManager.instance.currentPlayerStates == PlayerManager.PlayerStates.Running)
+        else if (Input.GetMouseButton(0) && GameManager.instance.currentGameState == GameManager.GameState.GamePlay && PlayerManager.instance.currentPlayerStates == PlayerStates.Running)
         {
             OnMouseHold?.Invoke();
 
@@ -59,16 +60,14 @@ public class InputManager : MonoBehaviour
 
             var difference = MouseCurrentPosition - MouseStartPosition;
             OnMouseDrag(difference.x);
-         
+
         }
-        else if(Input.GetMouseButtonUp(0) && GameManager.instance.currentGameState == GameManager.GameState.GamePlay && PlayerManager.instance.currentPlayerStates == PlayerManager.PlayerStates.Running)
+        else if (Input.GetMouseButtonUp(0) && GameManager.instance.currentGameState == GameManager.GameState.GamePlay && PlayerManager.instance.currentPlayerStates == PlayerStates.Running)
         {
 
             PlayerManager.instance.SwitchPlayerState();
-            OnMouseUp?.Invoke();           
+            OnMouseUp?.Invoke();
         }
-
     }
-  
 }
 
