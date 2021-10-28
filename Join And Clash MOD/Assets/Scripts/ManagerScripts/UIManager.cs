@@ -52,4 +52,9 @@ public class UIManager : MonoBehaviour
                 break;
         }
     }
+
+    public void SaveLevelData()
+    {
+        LevelManager.instance.Asign();
+    }
 }

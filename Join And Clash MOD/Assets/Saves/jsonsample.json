@@ -1,0 +1,25 @@
+{
+    "Items": [],
+    "ListItems": [
+        {
+            "name": "Level 0",
+            "objectsInLevels": [
+                {
+                    "name": "Floor",
+                    "sceneObjects": [
+                        {
+                            "instanceID": 16734
+                        },
+                        {
+                            "instanceID": 16754
+                        }
+                    ],
+                    "SceneObjectsName": [
+                        "Cube",
+                        "Cube"
+                    ]
+                }
+            ]
+        }
+    ]
+}
