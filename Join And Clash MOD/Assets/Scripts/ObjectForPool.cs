@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [System.Serializable]
-public struct ObjectForPool
+public class ObjectForPool
 {
     public GameObject prefab;
     public int prefabCount;

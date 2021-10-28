@@ -18,6 +18,7 @@ public class LevelManager : MonoBehaviour
     void Awake()
     {
         AssignInstance();
+        LoadLevelDesign();
     }
     private void AssignInstance()
     {
@@ -31,9 +32,9 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    void Start()
-    {
 
+    private void LoadLevelDesign()
+    {
         SaveLevelDesign.Init();
 
         AssignSceneObjectsName();

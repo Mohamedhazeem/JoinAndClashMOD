@@ -11,10 +11,31 @@ public class ObjectPoolManager : MonoBehaviour
 
     void Awake()
     {
+        //objectForPools = new List<ObjectForPool>();
         AssignInstance();
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
-      //  ObjectPoolInstantiate();
+        if (LevelManager.instance.currentLevelCount < LevelManager.TOTALLEVELCOUNT)
+        {
+            for (int i = 0; i < LevelManager.instance.levelDatas.Count; i++)
+            {
+                if(LevelManager.instance.currentLevelCount == i) 
+                {
+                    for (int j = 0; j < LevelManager.instance.levelDatas[i].objectsInLevels.Count; j++)
+                    {
+                        objectForPools[j].prefab = LevelManager.instance.levelDatas[i].objectsInLevels[j].sceneObjects[j];
+                        objectForPools[j].prefabCount = LevelManager.instance.levelDatas[i].objectsInLevels[j].sceneObjects.Count;
+                    }
+                }             
+            }
+        }
+        else
+        {
+            throw new System.Exception("level count above total level count");
+        }
+     
+
+        //  ObjectPoolInstantiate();
     }
     private void AssignInstance()
     {
