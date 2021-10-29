@@ -5,37 +5,34 @@ using UnityEngine;
 public class ObjectPoolManager : MonoBehaviour
 {
     public static ObjectPoolManager instance;
-    public List<ObjectForPool> objectForPools;
-
+    //public List<ObjectForPool> objectForPools;
+    //public ObjectForPool[] objectForPools;
+    public List<ObjectForPool> objectForPools = new List<ObjectForPool>() ;
     internal Dictionary<string, Queue<GameObject>> poolDictionary;
 
     void Awake()
     {
-        //objectForPools = new List<ObjectForPool>();
+       // objectForPools = new ObjectForPool[3];
         AssignInstance();
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
-        if (LevelManager.instance.currentLevelCount < LevelManager.TOTALLEVELCOUNT)
+        Debug.LogError(UserDataManager.instance.currentLevelCount);
+        if (UserDataManager.instance.currentLevelCount < LevelManager.TOTALLEVELCOUNT)
         {
-            for (int i = 0; i < LevelManager.instance.levelDatas.Count; i++)
-            {
-                if(LevelManager.instance.currentLevelCount == i) 
-                {
-                    for (int j = 0; j < LevelManager.instance.levelDatas[i].objectsInLevels.Count; j++)
-                    {
-                        objectForPools[j].prefab = LevelManager.instance.levelDatas[i].objectsInLevels[j].sceneObjects[j];
-                        objectForPools[j].prefabCount = LevelManager.instance.levelDatas[i].objectsInLevels[j].sceneObjects.Count;
-                    }
-                }             
-            }
+            AssignObjectForPool();
         }
         else
         {
-            throw new System.Exception("level count above total level count");
+            UserDataManager.instance.ResetCurrentLevelCount();
+            AssignObjectForPool();
         }
-     
 
-        //  ObjectPoolInstantiate();
+
+         ObjectPoolInstantiate();
+    }
+    private void Start()
+    {
+        
     }
     private void AssignInstance()
     {
@@ -48,6 +45,28 @@ public class ObjectPoolManager : MonoBehaviour
             Destroy(this);
         }
     }
+    private void AssignObjectForPool()
+    {       
+        for (int i = 0; i < LevelManager.instance.levelDatas.Count; i++)
+        {
+            if (LevelManager.instance.currentLevelCount == i)
+            {
+                var count = LevelManager.instance.levelDatas[i].objectsInLevels.Count;
+
+                for (int j = 0; j < count; j++)
+                {
+                    ObjectForPool objectPool = new ObjectForPool();
+                    for (int k = 0; k < 1; k++)
+                    {
+                        objectPool.prefab = LevelManager.instance.levelDatas[i].objectsInLevels[j].sceneObjects[k];
+                        objectPool.prefabCount = LevelManager.instance.levelDatas[i].objectsInLevels[j].sceneObjects.Count;
+                        objectForPools.Add(objectPool);
+                    }                    
+                }
+            }
+        }
+    }
+
     private void ObjectPoolInstantiate()
     {
         foreach (ObjectForPool objectPool in objectForPools)

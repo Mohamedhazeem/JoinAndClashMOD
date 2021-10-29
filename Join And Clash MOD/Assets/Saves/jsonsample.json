@@ -5,18 +5,111 @@
             "name": "Level 0",
             "objectsInLevels": [
                 {
-                    "name": "Floor",
+                    "name": "Floors",
                     "sceneObjects": [
+                        {
+                            "instanceID": 16770
+                        },
+                        {
+                            "instanceID": 16812
+                        }
+                    ],
+                    "SceneObjectsName": [
+                        "Floor1",
+                        "Floor2"
+                    ],
+                    "sceneObjectTransform": [
+                        {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 15.0
+                        }
+                    ]
+                },
+                {
+                    "name": "NPC",
+                    "sceneObjects": [
+                        {
+                            "instanceID": 16836
+                        },
+                        {
+                            "instanceID": 16800
+                        },
                         {
                             "instanceID": 16734
                         },
                         {
-                            "instanceID": 16754
+                            "instanceID": 16866
+                        }
+                    ],
+                    "SceneObjectsName": [
+                        "Character",
+                        "Character (1)",
+                        "Character (2)",
+                        "Character (3)"
+                    ],
+                    "sceneObjectTransform": [
+                        {
+                            "x": 0.0,
+                            "y": 0.4300000071525574,
+                            "z": 4.21999979019165
+                        },
+                        {
+                            "x": 3.2799999713897707,
+                            "y": 0.5699999928474426,
+                            "z": 7.059999942779541
+                        },
+                        {
+                            "x": -2.5199999809265138,
+                            "y": 0.38999998569488528,
+                            "z": 10.619999885559082
+                        },
+                        {
+                            "x": 2.440000057220459,
+                            "y": 0.6200000047683716,
+                            "z": 12.800000190734864
+                        }
+                    ]
+                },
+                {
+                    "name": "Obstacles",
+                    "sceneObjects": [
+                        {
+                            "instanceID": 16802
+                        },
+                        {
+                            "instanceID": 16854
+                        },
+                        {
+                            "instanceID": 16688
                         }
                     ],
                     "SceneObjectsName": [
                         "Cube",
-                        "Cube"
+                        "Cube1",
+                        "Cube2"
+                    ],
+                    "sceneObjectTransform": [
+                        {
+                            "x": 15.255890846252442,
+                            "y": -9.562311172485352,
+                            "z": 24.0
+                        },
+                        {
+                            "x": 1.809999942779541,
+                            "y": -9.562311172485352,
+                            "z": 24.0
+                        },
+                        {
+                            "x": 8.5,
+                            "y": -9.562311172485352,
+                            "z": 24.0
+                        }
                     ]
                 }
             ]

@@ -12,9 +12,6 @@ public class LevelManager : MonoBehaviour
 
     public List<LevelData> levelDatas;
 
-    /// total number of levels
-    /// 
-    /// </summary>
     void Awake()
     {
         AssignInstance();
@@ -53,6 +50,7 @@ public class LevelManager : MonoBehaviour
             for (int j = 0; j < levelDatas[i].objectsInLevels.Count; j++)
             {
                 levelDatas[i].objectsInLevels[j].AssignSceneObjectsName();
+                levelDatas[i].objectsInLevels[j].AssignSceneObjectsTransform();
             }
 
         }
@@ -85,11 +83,19 @@ public class LevelManager : MonoBehaviour
         public string name;
         public List<GameObject> sceneObjects;
         public List<string> SceneObjectsName;
+        public List<Vector3> sceneObjectTransform;
         public void AssignSceneObjectsName()
         {
             for (int i = 0; i < sceneObjects.Count; i++)
             {
                 SceneObjectsName.Add(sceneObjects[i].name);
+            }
+        }
+        public void AssignSceneObjectsTransform()
+        {
+            for (int i = 0; i < sceneObjects.Count; i++)
+            {
+                sceneObjectTransform.Add(sceneObjects[i].transform.position);
             }
         }
     }
