@@ -110,23 +110,52 @@ public class PlayerMovement : MonoBehaviour
     {
         while (true)
         {
-
-            if (EnemyManager.instance.enemyList.Count > 0)
-            {
-               
+            float distance = 0;
+            if (EnemyManager.instance.enemyList.Count > 0 && PlayerManager.instance.npc.Count > 0)
+            {                
                 for (int i = 0; i < EnemyManager.instance.enemyList.Count; i++)
                 {
-                    Debug.Log("ASDF");
-                    float distance = Vector3.Distance(transform.position, EnemyManager.instance.enemyList[i].transform.position);
-                    if(distance < PlayerManager.instance.enemyrange )
+                    distance = Vector3.Distance(transform.position, EnemyManager.instance.enemyList[i].transform.position);
+                    if(distance < PlayerManager.instance.enemyrange)
                     {
-                        Debug.Log(distance);
-                        EnemyManager.instance.enemyList[i].GetComponent<Enemy>().isMove = true;
+                        var enemy = EnemyManager.instance.enemyList[i].GetComponent<Enemy>();
+                        enemy.isMove = true;
                         EnemyManager.instance.currentEnemyStates = EnemyStates.Chase;
+                        if (PlayerManager.instance.npc.Count >0)
+                        {
+                            var npc = PlayerManager.instance.npc[0].GetComponent<CharacterMovement>();
+                            npc.moveSpeed = 8;
+                            var pos = npc.transform.position;
+                            var x = Mathf.Lerp(pos.x, enemy.transform.position.x, Time.deltaTime*20f);
+                            pos.x = x;
+                            npc.transform.position = pos;
+                        }
                     }
                 }
             }
-            yield return new WaitForSeconds(0.1f);
+            else if(EnemyManager.instance.enemyList.Count > 0 && PlayerManager.instance.npc.Count == 0)
+            {
+                for (int i = 0; i < EnemyManager.instance.enemyList.Count; i++)
+                {
+                    distance = Vector3.Distance(transform.position, EnemyManager.instance.enemyList[i].transform.position);
+                    if (distance < PlayerManager.instance.enemyrange)
+                    {
+                        var enemy = EnemyManager.instance.enemyList[i].GetComponent<Enemy>();
+                        enemy.isMove = true;
+                        enemy.Chase(transform);
+                        EnemyManager.instance.currentEnemyStates = EnemyStates.Chase;
+                        
+                            //var npc = PlayerManager.instance.npc[0].GetComponent<CharacterMovement>();
+                            //npc.moveSpeed = 8;
+                            //var pos = npc.transform.position;
+                            //var x = Mathf.Lerp(pos.x, enemy.transform.position.x, Time.deltaTime * 10f);
+                            //pos.x = x;
+                            //npc.transform.position = pos;
+                        
+                    }
+                }
+            }
+            yield return new WaitForSeconds(0.03f);
         }
     }
 

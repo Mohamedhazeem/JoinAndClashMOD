@@ -36,7 +36,7 @@ public class Enemy : MonoBehaviour
         {
             Move();
         }
-        //transform.position  = Vector3.MoveTowards(transform.position,)
+        
     }
     protected void StartRunAnimation()
     {
@@ -50,7 +50,13 @@ public class Enemy : MonoBehaviour
         transform.Translate(transform.forward * moveSpeed * Time.deltaTime, Space.World);
         StartRunAnimation();
     }
-    protected void StopMove()
+    public void Chase(Transform target)
+    {
+        transform.LookAt(target);
+        transform.Translate(transform.forward * moveSpeed * Time.deltaTime, Space.World);
+        StartRunAnimation();
+    }
+    public void StopMove()
     {
         if (EnemyManager.instance.currentEnemyStates == EnemyStates.Idle && GameManager.instance.currentGameState == GameManager.GameState.GamePlay)
         {
