@@ -5,18 +5,15 @@ using UnityEngine;
 public class ObjectPoolManager : MonoBehaviour
 {
     public static ObjectPoolManager instance;
-    //public List<ObjectForPool> objectForPools;
-    //public ObjectForPool[] objectForPools;
-    public List<ObjectForPool> objectForPools = new List<ObjectForPool>() ;
+
+    public List<ObjectForPool> objectForPools;
     internal Dictionary<string, Queue<GameObject>> poolDictionary;
 
     void Awake()
     {
-       // objectForPools = new ObjectForPool[3];
         AssignInstance();
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
-        Debug.LogError(UserDataManager.instance.currentLevelCount);
         if (UserDataManager.instance.currentLevelCount < LevelManager.TOTALLEVELCOUNT)
         {
             AssignObjectForPool();
@@ -49,7 +46,7 @@ public class ObjectPoolManager : MonoBehaviour
     {       
         for (int i = 0; i < LevelManager.instance.levelDatas.Count; i++)
         {
-            if (LevelManager.instance.currentLevelCount == i)
+            if (UserDataManager.instance.currentLevelCount == i)
             {
                 var count = LevelManager.instance.levelDatas[i].objectsInLevels.Count;
 
@@ -87,6 +84,7 @@ public class ObjectPoolManager : MonoBehaviour
         if (!poolDictionary.ContainsKey(gameObject.name))
         {
             GameObject newGameObject = Instantiate(gameObject);
+            Debug.LogError(newGameObject);
             newGameObject.name = gameObject.name;
             return newGameObject;
         }

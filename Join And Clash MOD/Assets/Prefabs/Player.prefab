@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 23209451633886114}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 1589710183706327072}
   - {fileID: 5136908153168853388}
@@ -99,6 +99,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 6771593767982744418}
+  capsuleCollider: {fileID: 0}
+  capsuleColliderHeight: 0
   moveSpeed: 4
   xMinimum: -4
   xMaximum: 4
@@ -114,7 +116,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2.5
+  m_Radius: 2
   m_Center: {x: 0, y: 2, z: 0}
 --- !u!1 &258426544952713465
 GameObject:

@@ -10,7 +10,6 @@ public static class SaveLevelDesign
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
-            Debug.Log("WO");
         }
     }
     public static void Save(string saveString)
@@ -21,7 +20,6 @@ public static class SaveLevelDesign
     {
         if (File.Exists(path + "jsonsample.json"))
         {
-            Debug.Log("IS THERE");
             var s = File.ReadAllText(path + "jsonsample.json");
             return s;
         }

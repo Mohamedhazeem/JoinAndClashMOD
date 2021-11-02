@@ -20,10 +20,31 @@ public class LevelSpawnManager : MonoBehaviour
             Destroy(this);
         }
     }
-
+    private void Start()
+    {
+        SpawnLevel();
+    }
     public void SpawnLevel()
     {
+        for (int i = 0; i < LevelManager.instance.levelDatas.Count; i++)
+        { 
+            if (UserDataManager.instance.currentLevelCount == i)
+            {
+                var count = LevelManager.instance.levelDatas[i].objectsInLevels.Count;
 
+                for (int j = 0; j < count; j++)
+                {
+
+                    for (int k = 0; k < LevelManager.instance.levelDatas[i].objectsInLevels[j].sceneObjects.Count; k++)
+                    {
+                       GameObject gameObject =  ObjectPoolManager.instance.GetObjectFromPool(LevelManager.instance.levelDatas[i].objectsInLevels[j].SceneObjectsName[k]);
+
+                       gameObject.transform.position = LevelManager.instance.levelDatas[i].objectsInLevels[j].sceneObjectTransform[k];
+                    }
+
+                }
+            }
+        }
     }
 
 }

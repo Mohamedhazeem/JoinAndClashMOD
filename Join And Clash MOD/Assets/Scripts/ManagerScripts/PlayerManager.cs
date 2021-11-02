@@ -8,17 +8,22 @@ public class PlayerManager : MonoBehaviour
     
     [Header("Player Spawn Point")]
     [SerializeField]private Transform playerSpawnPoint;
+
     [Header("Players")]
-    [SerializeField]private GameObject player;
-    public Material playerMaterial;
+    [SerializeField]
+    private GameObject player;
     internal GameObject currentPlayer;
+    public Material playerMaterial;
 
     public PlayerStates currentPlayerStates;
-    
+
+    public List<GameObject> npc;
+    public LayerMask layerMask;
+
     private void Awake()
     {
         AssignInstance();
-        currentPlayer = Instantiate(player, playerSpawnPoint.position, Quaternion.identity);
+        currentPlayer = Instantiate(player, playerSpawnPoint.position, Quaternion.identity);      
     }
     private void AssignInstance()
     {
@@ -35,13 +40,13 @@ public class PlayerManager : MonoBehaviour
     {
         currentPlayerStates = PlayerStates.Idle;
     }
+  
     public void SwitchPlayerState()
     {
         switch (currentPlayerStates)
         {
             case PlayerStates.Idle:
                 currentPlayerStates = PlayerStates.Running;
-                Debug.Log("W");
                 break;
 
             case PlayerStates.Running:
