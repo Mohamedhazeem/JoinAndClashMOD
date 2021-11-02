@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
 
         
         capsuleCollider = GetComponent<CapsuleCollider>();
-
+        StartCoroutine("NearestEnemy");
     }
     protected virtual void Update()
     {
@@ -106,6 +106,30 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+    protected IEnumerator NearestEnemy()
+    {
+        while (true)
+        {
+
+            if (EnemyManager.instance.enemyList.Count > 0)
+            {
+               
+                for (int i = 0; i < EnemyManager.instance.enemyList.Count; i++)
+                {
+                    Debug.Log("ASDF");
+                    float distance = Vector3.Distance(transform.position, EnemyManager.instance.enemyList[i].transform.position);
+                    if(distance < PlayerManager.instance.enemyrange )
+                    {
+                        Debug.Log(distance);
+                        EnemyManager.instance.enemyList[i].GetComponent<Enemy>().isMove = true;
+                        EnemyManager.instance.currentEnemyStates = EnemyStates.Chase;
+                    }
+                }
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.DrawWireSphere(transform.position + transform.forward * 5, 20);

@@ -18,6 +18,7 @@ public class PlayerManager : MonoBehaviour
     public PlayerStates currentPlayerStates;
 
     public List<GameObject> npc;
+    public float enemyrange;
     public LayerMask layerMask;
 
     private void Awake()

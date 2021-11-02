@@ -4,6 +4,8 @@ public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance;
 
+    public EnemyStates currentEnemyStates;
+
     public List<GameObject> enemyList;
     private void Awake()
     {
@@ -21,4 +23,16 @@ public class EnemyManager : MonoBehaviour
             Destroy(this);
         }
     }
+    private void Start()
+    {
+        currentEnemyStates = EnemyStates.Idle;
+    }
+}
+public enum EnemyStates
+{
+    Idle,
+    Chase,
+    Attack,
+    Win,
+    Die
 }

@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour
 
     [Header("Move Speed")]
     [SerializeField] private float moveSpeed;
+    internal bool isMove;
 
 
     //[Header("Clamp Value on X Axis")]
@@ -27,28 +28,31 @@ public class Enemy : MonoBehaviour
         //InputManager.instance.OnMouseDown += StartRunAnimation;
         //InputManager.instance.OnMouseDrag += PlayerSideMoves;
 
-
         capsuleCollider = GetComponent<CapsuleCollider>();
     }
     private void Update()
     {
+        if (isMove)
+        {
+            Move();
+        }
         //transform.position  = Vector3.MoveTowards(transform.position,)
     }
     protected void StartRunAnimation()
     {
-        if (PlayerManager.instance.currentPlayerStates == PlayerStates.Running && GameManager.instance.currentGameState == GameManager.GameState.GamePlay)
+        if (EnemyManager.instance.currentEnemyStates == EnemyStates.Chase && GameManager.instance.currentGameState == GameManager.GameState.GamePlay)
         {
             animator.SetTrigger(Animator.StringToHash("Run"));
         }
     }
-    protected virtual void Move()
+    public void Move()
     {
-        //vecto3.forward
         transform.Translate(transform.forward * moveSpeed * Time.deltaTime, Space.World);
+        StartRunAnimation();
     }
     protected void StopMove()
     {
-        if (PlayerManager.instance.currentPlayerStates == PlayerStates.Idle && GameManager.instance.currentGameState == GameManager.GameState.GamePlay)
+        if (EnemyManager.instance.currentEnemyStates == EnemyStates.Idle && GameManager.instance.currentGameState == GameManager.GameState.GamePlay)
         {
             animator.SetTrigger(Animator.StringToHash("Idle"));
         }
@@ -57,15 +61,10 @@ public class Enemy : MonoBehaviour
     {
         animator.SetTrigger(Animator.StringToHash("Die"));
         capsuleCollider.height = capsuleColliderHeight;
-        Destroy(this.gameObject, 1f);
+        EnemyManager.instance.enemyList.Remove(this.gameObject);
+        Destroy(this.gameObject);
     }
-    //protected virtual void PlayerSideMoves(float x)
-    //{
-    //    transform.Translate(Vector3.right * x * xMoveSpeed * Time.deltaTime, Space.World);
-    //    var position = transform.position;
-    //    position.x = Mathf.Clamp(position.x, xMinimum, xMaximum);
-    //    transform.position = position;
-    //}
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.CompareTag("Player"))
@@ -73,5 +72,8 @@ public class Enemy : MonoBehaviour
             Die();
         }
     }
-
+    //public bool HasPlayerPassed()
+    //{
+    //    var distance = transform.position.z -  
+    //}
 }
