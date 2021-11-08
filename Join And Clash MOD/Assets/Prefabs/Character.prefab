@@ -1057,7 +1057,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: b3f7331913673ba45b8bd9bfdd95a5dd, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -1106,12 +1106,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 3486203479822628190}
+  capsuleCollider: {fileID: 0}
+  capsuleColliderHeight: 0
   moveSpeed: 4
   xMinimum: -4
   xMaximum: 4
   xMoveSpeed: 2
   isMove: 0
+  isDie: 0
   characterRenderer: {fileID: 8565101588355960000}
+  isNextPlayer: 0
 --- !u!135 &9062896862019846470
 SphereCollider:
   m_ObjectHideFlags: 0

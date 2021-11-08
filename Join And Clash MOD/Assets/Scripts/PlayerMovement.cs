@@ -23,7 +23,6 @@ public class PlayerMovement : MonoBehaviour
         InputManager.instance.OnMouseUp += StopMove;
         InputManager.instance.OnMouseDown += StartRunAnimation;
         InputManager.instance.OnMouseDrag += PlayerSideMoves;
-
         
         capsuleCollider = GetComponent<CapsuleCollider>();
         StartCoroutine("NearestEnemy");
@@ -141,17 +140,19 @@ public class PlayerMovement : MonoBehaviour
                     if (distance < PlayerManager.instance.enemyrange)
                     {
                         var enemy = EnemyManager.instance.enemyList[i].GetComponent<Enemy>();
-                        enemy.isMove = true;
-                        enemy.Chase(transform);
-                        EnemyManager.instance.currentEnemyStates = EnemyStates.Chase;
-                        
-                            //var npc = PlayerManager.instance.npc[0].GetComponent<CharacterMovement>();
-                            //npc.moveSpeed = 8;
-                            //var pos = npc.transform.position;
-                            //var x = Mathf.Lerp(pos.x, enemy.transform.position.x, Time.deltaTime * 10f);
-                            //pos.x = x;
-                            //npc.transform.position = pos;
-                        
+                       
+                        if (!enemy.HasPlayerPassed())
+                        {
+                            enemy.isMove = true;
+                            EnemyManager.instance.currentEnemyStates = EnemyStates.Chase;
+                            enemy.Chase(transform);
+
+                        }else if (enemy.HasPlayerPassed())
+                        {
+                            enemy.isMove = false;
+                            EnemyManager.instance.currentEnemyStates = EnemyStates.Idle;
+                            enemy.StopMove(transform);
+                        }                                            
                     }
                 }
             }

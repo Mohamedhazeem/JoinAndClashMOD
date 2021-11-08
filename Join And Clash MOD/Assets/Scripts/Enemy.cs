@@ -14,20 +14,8 @@ public class Enemy : MonoBehaviour
     [Header("Move Speed")]
     [SerializeField] private float moveSpeed;
     internal bool isMove;
-
-
-    //[Header("Clamp Value on X Axis")]
-    //[SerializeField] private float xMinimum, xMaximum;
-    //[Header("Move speed on X Axis")]
-    //[SerializeField] private float xMoveSpeed;
-
     protected virtual void Start()
     {
-        //InputManager.instance.OnMouseHold += Move;
-        //InputManager.instance.OnMouseUp += StopMove;
-        //InputManager.instance.OnMouseDown += StartRunAnimation;
-        //InputManager.instance.OnMouseDrag += PlayerSideMoves;
-
         capsuleCollider = GetComponent<CapsuleCollider>();
     }
     private void Update()
@@ -35,8 +23,7 @@ public class Enemy : MonoBehaviour
         if (isMove)
         {
             Move();
-        }
-        
+        }     
     }
     protected void StartRunAnimation()
     {
@@ -54,12 +41,14 @@ public class Enemy : MonoBehaviour
     {
         transform.LookAt(target);
         transform.Translate(transform.forward * moveSpeed * Time.deltaTime, Space.World);
-        StartRunAnimation();
+        StartRunAnimation();            
     }
-    public void StopMove()
+    public void StopMove(Transform target)
     {
         if (EnemyManager.instance.currentEnemyStates == EnemyStates.Idle && GameManager.instance.currentGameState == GameManager.GameState.GamePlay)
         {
+            transform.LookAt(target);
+            transform.forward = Vector3.zero;
             animator.SetTrigger(Animator.StringToHash("Idle"));
         }
     }
@@ -68,7 +57,7 @@ public class Enemy : MonoBehaviour
         animator.SetTrigger(Animator.StringToHash("Die"));
         capsuleCollider.height = capsuleColliderHeight;
         EnemyManager.instance.enemyList.Remove(this.gameObject);
-        Destroy(this.gameObject);
+        Destroy(this.gameObject,1f);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -78,8 +67,17 @@ public class Enemy : MonoBehaviour
             Die();
         }
     }
-    //public bool HasPlayerPassed()
-    //{
-    //    var distance = transform.position.z -  
-    //}
+    public bool HasPlayerPassed()
+    {
+        var distance = transform.position.z - PlayerManager.instance.currentPlayer.transform.position.z;
+
+        if (distance < 0)
+        {
+            return true;
+        }
+        else
+        {         
+            return false;
+        }
+    }
 }
