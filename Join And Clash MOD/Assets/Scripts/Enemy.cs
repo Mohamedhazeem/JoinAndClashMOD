@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour
 
     [Header("Move Speed")]
     [SerializeField] private float moveSpeed;
+
     internal bool isMove;
     protected virtual void Start()
     {
@@ -23,7 +24,7 @@ public class Enemy : MonoBehaviour
         if (isMove)
         {
             Move();
-        }     
+        }
     }
     protected void StartRunAnimation()
     {
@@ -39,6 +40,10 @@ public class Enemy : MonoBehaviour
     }
     public void Chase(Transform target)
     {
+        if (EnemyManager.instance.currentEnemyStates == EnemyStates.Chase && GameManager.instance.currentGameState == GameManager.GameState.GamePlay)
+        { 
+
+        }
         transform.LookAt(target);
         transform.Translate(transform.forward * moveSpeed * Time.deltaTime, Space.World);
         StartRunAnimation();            
@@ -48,14 +53,20 @@ public class Enemy : MonoBehaviour
         if (EnemyManager.instance.currentEnemyStates == EnemyStates.Idle && GameManager.instance.currentGameState == GameManager.GameState.GamePlay)
         {
             transform.LookAt(target);
-            transform.forward = Vector3.zero;
             animator.SetTrigger(Animator.StringToHash("Idle"));
+            //EnemyManager.instance.enemyList.Remove(this.gameObject);
+            var distance = transform.position.z - PlayerManager.instance.currentPlayer.transform.position.z;
+            if (distance < -8)
+            {
+                EnemyManager.instance.enemyList.Remove(this.gameObject);
+            }
         }
     }
     protected void Die()
     {
         animator.SetTrigger(Animator.StringToHash("Die"));
         capsuleCollider.height = capsuleColliderHeight;
+        gameObject.tag = "Default";
         EnemyManager.instance.enemyList.Remove(this.gameObject);
         Destroy(this.gameObject,1f);
     }

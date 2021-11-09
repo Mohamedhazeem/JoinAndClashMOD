@@ -40,6 +40,15 @@ public class LevelSpawnManager : MonoBehaviour
                        GameObject gameObject =  ObjectPoolManager.instance.GetObjectFromPool(LevelManager.instance.levelDatas[i].objectsInLevels[j].SceneObjectsName[k]);
 
                        gameObject.transform.position = LevelManager.instance.levelDatas[i].objectsInLevels[j].sceneObjectTransform[k];
+
+                        if(gameObject.name == "EnemySpawnPoint")
+                        {
+                            EnemyManager.instance.enemiesSpawnPoint = gameObject;
+                        }
+                        else if(gameObject.name == "PlayerSpawnPoint")
+                        {
+                            PlayerManager.instance.playerSpawnPoint = gameObject.transform;
+                        }
                     }
 
                 }

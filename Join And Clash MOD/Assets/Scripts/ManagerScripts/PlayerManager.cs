@@ -7,7 +7,7 @@ public class PlayerManager : MonoBehaviour
     public static PlayerManager instance;
     
     [Header("Player Spawn Point")]
-    [SerializeField]private Transform playerSpawnPoint;
+    public Transform playerSpawnPoint;
 
     [Header("Players")]
     [SerializeField]

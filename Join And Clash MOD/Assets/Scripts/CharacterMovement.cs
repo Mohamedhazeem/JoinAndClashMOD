@@ -62,7 +62,6 @@ public class CharacterMovement : PlayerMovement
             {
                 PlayerManager.instance.npc.Add(this.gameObject);
             }
-
         }
     }
 }

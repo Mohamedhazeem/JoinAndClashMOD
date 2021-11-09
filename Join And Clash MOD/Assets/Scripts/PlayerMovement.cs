@@ -118,12 +118,15 @@ public class PlayerMovement : MonoBehaviour
                     if(distance < PlayerManager.instance.enemyrange)
                     {
                         var enemy = EnemyManager.instance.enemyList[i].GetComponent<Enemy>();
-                        enemy.isMove = true;
+
                         EnemyManager.instance.currentEnemyStates = EnemyStates.Chase;
+                        enemy.isMove = true;
+
                         if (PlayerManager.instance.npc.Count >0)
                         {
                             var npc = PlayerManager.instance.npc[0].GetComponent<CharacterMovement>();
                             npc.moveSpeed = 8;
+                            
                             var pos = npc.transform.position;
                             var x = Mathf.Lerp(pos.x, enemy.transform.position.x, Time.deltaTime*20f);
                             pos.x = x;
@@ -143,20 +146,21 @@ public class PlayerMovement : MonoBehaviour
                        
                         if (!enemy.HasPlayerPassed())
                         {
-                            enemy.isMove = true;
+
                             EnemyManager.instance.currentEnemyStates = EnemyStates.Chase;
                             enemy.Chase(transform);
 
-                        }else if (enemy.HasPlayerPassed())
-                        {
-                            enemy.isMove = false;
+                        }
+                        else if (enemy.HasPlayerPassed())
+                        {                            
                             EnemyManager.instance.currentEnemyStates = EnemyStates.Idle;
-                            enemy.StopMove(transform);
+                            enemy.isMove = false;
+                            enemy.StopMove(transform);                           
                         }                                            
                     }
                 }
             }
-            yield return new WaitForSeconds(0.03f);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
