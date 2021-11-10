@@ -1121,7 +1121,7 @@ MonoBehaviour:
   animator: {fileID: 3486203479822628190}
   capsuleCollider: {fileID: 5259353704471419896}
   capsuleColliderHeight: 0
-  moveSpeed: 3
+  moveSpeed: 4
 --- !u!1 &7930538422222100165
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
      {
         Menu,
         GamePlay,
+        Climax,
         Win,
         Lose
      }
@@ -50,6 +51,9 @@ public class GameManager : MonoBehaviour
                 break;
 
             case GameState.Lose:
+                break;
+
+            case GameState.Climax:
                 break;
 
             default:

@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    protected delegate void OnClimaxIdleAnimationCallBack();
+    protected OnClimaxIdleAnimationCallBack ClimaxIdleAnimation;
+
     [Header("Animator")]
     public Animator animator;
     [Header("Capsule collider")]
@@ -20,17 +23,18 @@ public class PlayerMovement : MonoBehaviour
     protected virtual void Start()
     {
         InputManager.instance.OnMouseHold += Move;
-        InputManager.instance.OnMouseUp += StopMove;
+        InputManager.instance.OnMouseUp += Idle;
         InputManager.instance.OnMouseDown += StartRunAnimation;
         InputManager.instance.OnMouseDrag += PlayerSideMoves;
         
         capsuleCollider = GetComponent<CapsuleCollider>();
-        StartCoroutine("NearestEnemy");
+        PlayerManager.instance.OnClimaxIdleAnimation += Idle;
+        //StartCoroutine("NearestEnemy");
     }
     protected virtual void Update()
     {
         CreateEnemyList();
-        
+        Nearest();
     }
     protected void StartRunAnimation()
     {
@@ -43,9 +47,13 @@ public class PlayerMovement : MonoBehaviour
     {        
         transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime, Space.World);
     }
-    protected void StopMove()
+    protected virtual void Idle()
     {
         if (PlayerManager.instance.currentPlayerStates == PlayerStates.Idle && GameManager.instance.currentGameState == GameManager.GameState.GamePlay)
+        {
+            animator.SetTrigger(Animator.StringToHash("Idle"));
+        }
+        else if(PlayerManager.instance.currentPlayerStates == PlayerStates.ClimaxIdle && GameManager.instance.currentGameState == GameManager.GameState.Climax)
         {
             animator.SetTrigger(Animator.StringToHash("Idle"));
         }
@@ -57,7 +65,7 @@ public class PlayerMovement : MonoBehaviour
         ChooseNextPlayer();
 
         InputManager.instance.OnMouseHold -= Move;
-        InputManager.instance.OnMouseUp -= StopMove;
+        InputManager.instance.OnMouseUp -= Idle;
         InputManager.instance.OnMouseDown -= StartRunAnimation;
         InputManager.instance.OnMouseDrag -= PlayerSideMoves;
 
@@ -67,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            Invoke("DisablePlayer", 1f);
+            Invoke("DisablePlayer",1f);
         }
        
     }
@@ -81,9 +89,16 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.CompareTag("Obstacle") || collision.collider.CompareTag("Enemy"))
+        if ((collision.collider.CompareTag("Obstacle") || collision.collider.CompareTag("Enemy")) && GameManager.instance.currentGameState != GameManager.GameState.Climax)
         {
             Die(false);
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("EnemyTrigger"))
+        {
+            ClimaxIdleAnimation?.Invoke();
         }
     }
     private void OnDisable()
@@ -105,72 +120,64 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-    protected IEnumerator NearestEnemy()
+    protected void Nearest()
     {
-        while (true)
+        float distance = 0;
+        if (EnemyManager.instance.enemyList.Count > 0 && PlayerManager.instance.npc.Count > 0)
         {
-            float distance = 0;
-            if (EnemyManager.instance.enemyList.Count > 0 && PlayerManager.instance.npc.Count > 0)
-            {                
-                for (int i = 0; i < EnemyManager.instance.enemyList.Count; i++)
+            for (int i = 0; i < EnemyManager.instance.enemyList.Count; i++)
+            {
+                distance = Vector3.Distance(transform.position, EnemyManager.instance.enemyList[i].transform.position);
+                if (distance < PlayerManager.instance.enemyrange)
                 {
-                    distance = Vector3.Distance(transform.position, EnemyManager.instance.enemyList[i].transform.position);
-                    if(distance < PlayerManager.instance.enemyrange)
+                    var enemy = EnemyManager.instance.enemyList[i].GetComponent<Enemy>();
+                    enemy.isMove = true;
+                    EnemyManager.instance.currentEnemyStates = EnemyStates.Chase;
+                    if (PlayerManager.instance.npc.Count > 0)
                     {
-                        var enemy = EnemyManager.instance.enemyList[i].GetComponent<Enemy>();
+                        var npc = PlayerManager.instance.npc[0].GetComponent<CharacterMovement>();
+                        npc.moveSpeed = 8;
+                        var pos = npc.transform.position;
+                        var x = Mathf.Lerp(pos.x, enemy.transform.position.x, Time.deltaTime * 20f);
+                        pos.x = x;
+                        npc.transform.position = pos;
+                    }
+                }
+            }
+        }
+        else if (EnemyManager.instance.enemyList.Count > 0 && PlayerManager.instance.npc.Count == 0)
+        {
+            for (int i = 0; i < EnemyManager.instance.enemyList.Count; i++)
+            {
+                distance = Vector3.Distance(transform.position, EnemyManager.instance.enemyList[i].transform.position);
+                if (distance < PlayerManager.instance.enemyrange)
+                {
+                    var enemy = EnemyManager.instance.enemyList[i].GetComponent<Enemy>();
+
+                    if (!enemy.HasPlayerPassed())
+                    {
 
                         EnemyManager.instance.currentEnemyStates = EnemyStates.Chase;
-                        enemy.isMove = true;
+                        enemy.Chase(transform);
 
-                        if (PlayerManager.instance.npc.Count >0)
-                        {
-                            var npc = PlayerManager.instance.npc[0].GetComponent<CharacterMovement>();
-                            npc.moveSpeed = 8;
-                            
-                            var pos = npc.transform.position;
-                            var x = Mathf.Lerp(pos.x, enemy.transform.position.x, Time.deltaTime*20f);
-                            pos.x = x;
-                            npc.transform.position = pos;
-                        }
                     }
-                }
-            }
-            else if(EnemyManager.instance.enemyList.Count > 0 && PlayerManager.instance.npc.Count == 0)
-            {
-                for (int i = 0; i < EnemyManager.instance.enemyList.Count; i++)
-                {
-                    distance = Vector3.Distance(transform.position, EnemyManager.instance.enemyList[i].transform.position);
-                    if (distance < PlayerManager.instance.enemyrange)
+                    else if (enemy.HasPlayerPassed())
                     {
-                        var enemy = EnemyManager.instance.enemyList[i].GetComponent<Enemy>();
-                       
-                        if (!enemy.HasPlayerPassed())
-                        {
+                        EnemyManager.instance.currentEnemyStates = EnemyStates.Idle;
+                        enemy.Idle(transform);
 
-                            EnemyManager.instance.currentEnemyStates = EnemyStates.Chase;
-                            enemy.Chase(transform);
-
-                        }
-                        else if (enemy.HasPlayerPassed())
-                        {                            
-                            EnemyManager.instance.currentEnemyStates = EnemyStates.Idle;
-                            enemy.isMove = false;
-                            enemy.StopMove(transform);                           
-                        }                                            
                     }
                 }
             }
-            yield return new WaitForSeconds(0.1f);
-        }
+        }               
     }
-
     private void OnDrawGizmosSelected()
     {
         Gizmos.DrawWireSphere(transform.position + transform.forward * 5, 20);
     }
     protected void ChooseNextPlayer()
     {
-        if(PlayerManager.instance.npc.Count > 0)
+        if(PlayerManager.instance.npc.Count > 0 && !PlayerManager.instance.currentPlayer.activeInHierarchy)
         {
             PlayerManager.instance.npc[0].GetComponent<CharacterMovement>().isNextPlayer = true;
             CameraManager.instance.target = PlayerManager.instance.npc[0].transform;

@@ -5,14 +5,17 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 { 
     public static PlayerManager instance;
-    
+
+    public delegate void ClimaxIdleAnimationCallback();
+    public event ClimaxIdleAnimationCallback OnClimaxIdleAnimation;
+
     [Header("Player Spawn Point")]
     public Transform playerSpawnPoint;
 
     [Header("Players")]
     [SerializeField]
     private GameObject player;
-    internal GameObject currentPlayer;
+    public GameObject currentPlayer;
     public Material playerMaterial;
 
     public PlayerStates currentPlayerStates;
@@ -61,7 +64,41 @@ public class PlayerManager : MonoBehaviour
                 break;
 
             case PlayerStates.Die:
-                break;           
+                break;
+
+            case PlayerStates.ClimaxIdle:
+                OnClimaxIdleAnimation?.Invoke();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    public Transform PlayerAndNPCTransform()
+    {
+        if (npc.Count > 0 && currentPlayer.activeInHierarchy)
+        {          
+            if (!npc.Contains(currentPlayer))
+            {
+                npc.Add(currentPlayer);
+            }
+            
+            var transform = Random.Range(0, npc.Count);
+            return npc[transform].transform;            
+        }
+        else if (npc.Count > 0 && !currentPlayer.activeInHierarchy)
+        {
+            var transform = Random.Range(0, npc.Count);
+            return npc[transform].transform;
+        }
+        else if(npc.Count == 0 && currentPlayer.activeInHierarchy)
+        {
+            return currentPlayer.transform;
+        }
+        else
+        {
+            return null;
         }
     }
 }
@@ -70,6 +107,7 @@ public enum PlayerStates
     Idle,
     Running,
     Attack,
+    ClimaxIdle,
     Win,
     Die
 }

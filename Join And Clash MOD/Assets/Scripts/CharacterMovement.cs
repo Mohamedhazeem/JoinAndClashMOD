@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterMovement : PlayerMovement
@@ -13,6 +11,7 @@ public class CharacterMovement : PlayerMovement
     protected override void Start()
     {
         isMove = isDie = isNextPlayer = false;
+        //ClimaxIdleAnimation += Idle;
         base.Start();
     }
     protected override void Update()
@@ -42,7 +41,7 @@ public class CharacterMovement : PlayerMovement
     private void OnCollisionEnter(Collision collision)
     {
 
-        if (collision.collider.CompareTag("Obstacle") || collision.collider.CompareTag("Enemy"))
+        if ((collision.collider.CompareTag("Obstacle") || collision.collider.CompareTag("Enemy")) && GameManager.instance.currentGameState != GameManager.GameState.Climax)
         {
             isMove = false;
             isDie = true;
@@ -62,6 +61,10 @@ public class CharacterMovement : PlayerMovement
             {
                 PlayerManager.instance.npc.Add(this.gameObject);
             }
+        }
+        if (other.CompareTag("EnemyTrigger"))
+        {
+            ClimaxIdleAnimation?.Invoke();
         }
     }
 }

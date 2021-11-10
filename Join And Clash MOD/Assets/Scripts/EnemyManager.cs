@@ -63,35 +63,17 @@ public class EnemyManager : MonoBehaviour
        
     }
     IEnumerator SpawnEnemiesCouroutine(int enemyCount)
-    {        
+    {
         while (enemySpawnCount < enemyCount)
         {
             enemySpawnCount++;
             yield return waitForSeconds;
             GameObject gameObject = Instantiate(enemyPrefab, enemiesSpawnPoint.transform.position, Quaternion.Euler(0, 180, 0));
-            var enemy = gameObject.GetComponent<Enemy>();
-            enemy.Chase(transform);       
+            var castleEnemy = gameObject.GetComponent<CastleEnemy>();
+            castleEnemy.targetTransform = PlayerManager.instance.PlayerAndNPCTransform();
+            currentEnemyStates = EnemyStates.Chase;           
         }
-    }
-    private void InstantiateEnemies()
-    {
-        
-            for (int i = 0; i < 5; i++) //coloumn
-            {
-
-                for (int j = 0; j < 5; j++) // row
-                {
-                    var enemyGameobject = Instantiate(enemyPrefab);
-                    //enemyGameobject.transform.parent = enemySpawnPoint.spawnPoint.transform;
-                    enemyPositionOnSpawnPoint.x = enemiesSpawnPoint.transform.position.x + i * 1.5f;
-                    enemyPositionOnSpawnPoint.y = 1.5f;
-                    enemyPositionOnSpawnPoint.z = enemiesSpawnPoint.transform.position.z + j * 1.5f;
-                    enemyGameobject.transform.position = enemyPositionOnSpawnPoint;
-
-                }
-            }
-        
-    }
+    }    
 }
 public enum EnemyStates
 {

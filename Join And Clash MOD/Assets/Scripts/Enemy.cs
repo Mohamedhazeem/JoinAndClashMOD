@@ -14,12 +14,12 @@ public class Enemy : MonoBehaviour
     [Header("Move Speed")]
     [SerializeField] private float moveSpeed;
 
-    internal bool isMove;
+    public bool isMove;
     protected virtual void Start()
     {
         capsuleCollider = GetComponent<CapsuleCollider>();
     }
-    private void Update()
+    protected virtual void Update()
     {
         if (isMove)
         {
@@ -32,29 +32,35 @@ public class Enemy : MonoBehaviour
         {
             animator.SetTrigger(Animator.StringToHash("Run"));
         }
+        else if(EnemyManager.instance.currentEnemyStates == EnemyStates.Chase && GameManager.instance.currentGameState == GameManager.GameState.Climax)
+        {
+            animator.SetTrigger(Animator.StringToHash("Run"));
+        }
     }
     public void Move()
     {
         transform.Translate(transform.forward * moveSpeed * Time.deltaTime, Space.World);
         StartRunAnimation();
     }
-    public void Chase(Transform target)
+    public virtual void Chase(Transform target)
     {
-        if (EnemyManager.instance.currentEnemyStates == EnemyStates.Chase && GameManager.instance.currentGameState == GameManager.GameState.GamePlay)
-        { 
-
+        if (EnemyManager.instance.currentEnemyStates == EnemyStates.Chase && (GameManager.instance.currentGameState == GameManager.GameState.GamePlay || GameManager.instance.currentGameState == GameManager.GameState.Climax))
+        {
+            var pos = target.position;
+            pos.y = 0.25f;
+            target.position = pos;
+            transform.LookAt(target);            
+            transform.Translate(transform.forward * moveSpeed * Time.deltaTime, Space.World);
+            StartRunAnimation();
         }
-        transform.LookAt(target);
-        transform.Translate(transform.forward * moveSpeed * Time.deltaTime, Space.World);
-        StartRunAnimation();            
     }
-    public void StopMove(Transform target)
+    public void Idle(Transform target)
     {
         if (EnemyManager.instance.currentEnemyStates == EnemyStates.Idle && GameManager.instance.currentGameState == GameManager.GameState.GamePlay)
         {
             transform.LookAt(target);
             animator.SetTrigger(Animator.StringToHash("Idle"));
-            //EnemyManager.instance.enemyList.Remove(this.gameObject);
+
             var distance = transform.position.z - PlayerManager.instance.currentPlayer.transform.position.z;
             if (distance < -8)
             {
@@ -62,18 +68,25 @@ public class Enemy : MonoBehaviour
             }
         }
     }
+    public void Idle()
+    {
+        if (EnemyManager.instance.currentEnemyStates == EnemyStates.Idle)
+        {
+            animator.SetBool(Animator.StringToHash("Idle"),true);
+        }
+    }
     protected void Die()
     {
         animator.SetTrigger(Animator.StringToHash("Die"));
         capsuleCollider.height = capsuleColliderHeight;
-        gameObject.tag = "Default";
+       // gameObject.tag = "Default";
         EnemyManager.instance.enemyList.Remove(this.gameObject);
-        Destroy(this.gameObject,1f);
+        Destroy(this.gameObject,0.5f);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.CompareTag("Player"))
+        if (collision.collider.CompareTag("Player") && GameManager.instance.currentGameState != GameManager.GameState.Climax)
         {
             Die();
         }
