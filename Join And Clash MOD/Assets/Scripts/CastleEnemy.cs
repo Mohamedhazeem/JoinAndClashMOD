@@ -22,10 +22,8 @@ public class CastleEnemy : Enemy
         
         if (isTargetAvailable)
         {
-            Chase(targetTransform);
-           
+            Chase(targetTransform);           
         }
-
     }
 
     public override void Chase(Transform target)

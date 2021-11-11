@@ -54,7 +54,6 @@ public class InputManager : MonoBehaviour
         else if (Input.GetMouseButton(0) && GameManager.instance.currentGameState == GameManager.GameState.GamePlay && PlayerManager.instance.currentPlayerStates == PlayerStates.Running)
         {
             OnMouseHold?.Invoke();
-            Debug.LogWarning("l");
             MouseCurrentPosition = orthographicCamera.ScreenToWorldPoint(Input.mousePosition);
             MouseCurrentPosition.y = PlayerManager.instance.currentPlayer.transform.position.y;
 

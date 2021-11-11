@@ -9,6 +9,9 @@ public class PlayerManager : MonoBehaviour
     public delegate void ClimaxIdleAnimationCallback();
     public event ClimaxIdleAnimationCallback OnClimaxIdleAnimation;
 
+    public delegate void ClimaxWinAnimationCallback();
+    public event ClimaxWinAnimationCallback OnClimaxWinAnimation;
+
     [Header("Player Spawn Point")]
     public Transform playerSpawnPoint;
 
@@ -70,6 +73,7 @@ public class PlayerManager : MonoBehaviour
                 break;
 
             case PlayerStates.Win:
+                OnClimaxWinAnimation?.Invoke();
                 break;
 
             case PlayerStates.Die:
@@ -77,7 +81,7 @@ public class PlayerManager : MonoBehaviour
 
             case PlayerStates.ClimaxIdle:
                 OnClimaxIdleAnimation?.Invoke();
-                //StartCoroutine(ClimaxIdleToRun());
+                StartCoroutine(ClimaxIdleToRun());
                 break;
 
             default:
@@ -87,7 +91,7 @@ public class PlayerManager : MonoBehaviour
     IEnumerator ClimaxIdleToRun()
     {
         yield return new WaitForSeconds(1f);
-        currentPlayerStates = PlayerStates.Running;
+        currentPlayerStates = PlayerStates.Attack;
     }
     public Transform PlayerAndNPCTransform()
     {

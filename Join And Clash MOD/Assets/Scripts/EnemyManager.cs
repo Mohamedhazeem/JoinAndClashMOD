@@ -79,7 +79,7 @@ public class EnemyManager : MonoBehaviour
             currentEnemyStates = EnemyStates.Chase;
 
             player.castleEnemy = castleEnemy;
-            player.targetTransform = gameObject.transform;
+            player.targetTransform = EnemyTransform();//gameObject.transform;
             player.isTargetAvailable = true;
         }
     }

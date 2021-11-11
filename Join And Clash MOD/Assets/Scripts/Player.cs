@@ -40,13 +40,14 @@ public class Player : MonoBehaviour
         
         capsuleCollider = GetComponent<CapsuleCollider>();
         PlayerManager.instance.OnClimaxIdleAnimation += Idle;
+        PlayerManager.instance.OnClimaxWinAnimation += Win;
     }
     protected virtual void Update()
     {
         CreateEnemyList();
         Nearest();
 
-        if (GameManager.instance.currentGameState == GameManager.GameState.Climax && (PlayerManager.instance.currentPlayerStates == PlayerStates.Attack))
+        if (GameManager.instance.currentGameState == GameManager.GameState.Climax && (PlayerManager.instance.currentPlayerStates == PlayerStates.Running ||PlayerManager.instance.currentPlayerStates == PlayerStates.Attack))
         {
             if (isTargetAvailable)
             {
@@ -60,7 +61,6 @@ public class Player : MonoBehaviour
         {
             if (Vector3.Distance(transform.position, target.position) > 4)
             {
-                //PlayerManager.instance.currentPlayerStates = PlayerStates.Attack;
                 var pos = target.position;
                 pos.y = 0.25f;
                 target.position = pos;
@@ -76,6 +76,7 @@ public class Player : MonoBehaviour
         else
         {
             var newTarget = EnemyManager.instance.EnemyTransform();
+            Debug.Log(newTarget);
             if (newTarget != null)
             {
                 targetTransform = newTarget;
@@ -85,6 +86,7 @@ public class Player : MonoBehaviour
             {
                 PlayerManager.instance.currentPlayerStates = PlayerStates.Win;
                 Win();
+                PlayerManager.instance.SwitchPlayerState();
                 isTargetAvailable = false;
             }
         }
@@ -93,12 +95,12 @@ public class Player : MonoBehaviour
     {
         if (PlayerManager.instance.currentPlayerStates == PlayerStates.Running && GameManager.instance.currentGameState == GameManager.GameState.GamePlay)
         {
-            Debug.Log("Run0");
-            animator.SetTrigger(Animator.StringToHash("Run"));
+            //animator.SetTrigger(Animator.StringToHash("Run"));
+            
+            animator.SetBool(Animator.StringToHash("Run"), true);
         }
         else if(PlayerManager.instance.currentPlayerStates == PlayerStates.Attack && GameManager.instance.currentGameState == GameManager.GameState.Climax)
         {
-            Debug.Log("Run1");
             animator.SetBool(Animator.StringToHash("Run"), true);
            // animator.SetTrigger(Animator.StringToHash("Run"));
         }
@@ -112,11 +114,13 @@ public class Player : MonoBehaviour
         if (PlayerManager.instance.currentPlayerStates == PlayerStates.Idle && GameManager.instance.currentGameState == GameManager.GameState.GamePlay)
         {
             Debug.Log("1");
+            animator.SetBool(Animator.StringToHash("Run"), false);
             animator.SetTrigger(Animator.StringToHash("Idle"));
         }
         else if(PlayerManager.instance.currentPlayerStates == PlayerStates.ClimaxIdle && GameManager.instance.currentGameState == GameManager.GameState.Climax)
         {
             Debug.Log("Working");
+            animator.SetBool(Animator.StringToHash("Run"), false);
             animator.SetTrigger(Animator.StringToHash("Idle"));
         }
 
@@ -125,7 +129,9 @@ public class Player : MonoBehaviour
     {
         if(PlayerManager.instance.currentPlayerStates == PlayerStates.Win)
         {
+            animator.SetBool(Animator.StringToHash("Attack"), false);
             animator.SetBool(Animator.StringToHash("Win"), true);
+            
         }
     }
     public virtual void CheckHealth()
