@@ -101,10 +101,15 @@ MonoBehaviour:
   animator: {fileID: 6771593767982744418}
   capsuleCollider: {fileID: 0}
   capsuleColliderHeight: 0
+  castleEnemy: {fileID: 0}
+  targetTransform: {fileID: 0}
   moveSpeed: 4
   xMinimum: -4
   xMaximum: 4
   xMoveSpeed: 2
+  health: 50
+  attackPower: 10
+  isTargetAvailable: 0
 --- !u!135 &3530416975862991740
 SphereCollider:
   m_ObjectHideFlags: 0

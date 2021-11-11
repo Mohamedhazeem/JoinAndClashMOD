@@ -69,11 +69,33 @@ public class EnemyManager : MonoBehaviour
             enemySpawnCount++;
             yield return waitForSeconds;
             GameObject gameObject = Instantiate(enemyPrefab, enemiesSpawnPoint.transform.position, Quaternion.Euler(0, 180, 0));
+            enemyList.Add(gameObject);
             var castleEnemy = gameObject.GetComponent<CastleEnemy>();
-            castleEnemy.targetTransform = PlayerManager.instance.PlayerAndNPCTransform();
-            currentEnemyStates = EnemyStates.Chase;           
+            var playerTransform = PlayerManager.instance.PlayerAndNPCTransform();
+            var player = playerTransform.GetComponent<Player>();
+
+            castleEnemy.targetTransform = playerTransform;
+            castleEnemy.player = player;
+            currentEnemyStates = EnemyStates.Chase;
+
+            player.castleEnemy = castleEnemy;
+            player.targetTransform = gameObject.transform;
+            player.isTargetAvailable = true;
         }
-    }    
+    }
+    public Transform EnemyTransform()
+    {
+        if (enemyList.Count > 0 )
+        {
+
+            var transform = Random.Range(0, enemyList.Count);
+            return enemyList[transform].transform;
+        }
+        else
+        {
+            return null;
+        }
+    }
 }
 public enum EnemyStates
 {

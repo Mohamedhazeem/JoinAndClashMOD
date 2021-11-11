@@ -54,10 +54,19 @@ public class PlayerManager : MonoBehaviour
                 break;
 
             case PlayerStates.Running:
-                currentPlayerStates = PlayerStates.Idle;
+                //if(GameManager.instance.currentGameState != GameManager.GameState.Climax)
+                //{
+                //    currentPlayerStates = PlayerStates.Running;
+                //}
+                //else
+                //{
+                    currentPlayerStates = PlayerStates.Idle;
+                //}
+                
                 break;
 
             case PlayerStates.Attack:
+
                 break;
 
             case PlayerStates.Win:
@@ -68,13 +77,18 @@ public class PlayerManager : MonoBehaviour
 
             case PlayerStates.ClimaxIdle:
                 OnClimaxIdleAnimation?.Invoke();
+                //StartCoroutine(ClimaxIdleToRun());
                 break;
 
             default:
                 break;
         }
     }
-
+    IEnumerator ClimaxIdleToRun()
+    {
+        yield return new WaitForSeconds(1f);
+        currentPlayerStates = PlayerStates.Running;
+    }
     public Transform PlayerAndNPCTransform()
     {
         if (npc.Count > 0 && currentPlayer.activeInHierarchy)

@@ -9,8 +9,8 @@ public class EnemyTrigger : MonoBehaviour
     {
         GameManager.instance.currentGameState = GameManager.GameState.Climax;
         PlayerManager.instance.currentPlayerStates = PlayerStates.ClimaxIdle;
-        PlayerManager.instance.SwitchPlayerState();
         EnemyManager.instance.StartSpawningEnemies();
+        PlayerManager.instance.SwitchPlayerState();
         Destroy(this.gameObject, 0.5f);
     }
 }

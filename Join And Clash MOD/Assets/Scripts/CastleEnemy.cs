@@ -1,8 +1,16 @@
+using System;
 using UnityEngine;
 public class CastleEnemy : Enemy
 {
+    [Header("Target")]
     public Transform targetTransform;
     public bool isTargetAvailable;
+    [Header("Player Component")]
+    public Player player;
+    [Header("Health")]
+    public float health;
+    [Header("Attack Power")]
+    public float attackPower;
     protected override void Start()
     {
         base.Start();
@@ -15,43 +23,34 @@ public class CastleEnemy : Enemy
         if (isTargetAvailable)
         {
             Chase(targetTransform);
+           
         }
 
     }
-    //IEnumerator SpawnEnemiesCouroutine(int enemyCount)
-    //{
-    //    while (enemySpawnCount < enemyCount)
-    //    {
-    //        enemySpawnCount++;
-    //        yield return waitForSeconds;
-    //        GameObject gameObject = Instantiate(enemyPrefab, enemiesSpawnPoint.transform.position, Quaternion.Euler(0, 180, 0));
-    //        var castleEnemy = gameObject.GetComponent<CastleEnemy>();
-    //        castleEnemy.targetTransform = PlayerManager.instance.PlayerAndNPCTransform();
-    //        currentEnemyStates = EnemyStates.Chase;
-    //    }
-    //}
+
     public override void Chase(Transform target)
     {
-        Debug.Log(target.gameObject.activeInHierarchy);
-        if(target != null && target.gameObject.activeInHierarchy)
+        if (target != null)
         {
-            if(Vector3.Distance(transform.position,target.position) > 1.5)
+            if(Vector3.Distance(transform.position,target.position) > 2)
             {
-                base.Chase(target);
+                base.Chase(target);             
             }
             else
             {
-                Attack();
+                
+                AttackAnimation();
             }
             
         }
         else
         {
-            targetTransform = null;
-            var newTarget = PlayerManager.instance.PlayerAndNPCTransform();        
+            var newTarget = PlayerManager.instance.PlayerAndNPCTransform();
+            
             if (newTarget != null)
             {
                 targetTransform = newTarget;
+                player = targetTransform.GetComponent<Player>();
             }
             else
             {
@@ -61,8 +60,30 @@ public class CastleEnemy : Enemy
             }
         }
     }
+    public void AttackAnimation()
+    {      
+            animator.SetBool(Animator.StringToHash("Attack"), true);                
+    }
     public void Attack()
     {
-        animator.SetBool(Animator.StringToHash( "Attack"), true);
+        if(targetTransform != null)
+        {
+            player.health -= attackPower;
+            if (player.health <= 0)
+            {
+                player.CheckHealth();
+                targetTransform = null;
+                player = null;
+            }
+           
+        }
+    }
+
+    internal void CheckHealth()
+    {
+        if (health <= 0)
+        {
+            Die();
+        }
     }
 }

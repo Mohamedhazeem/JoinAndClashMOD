@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CharacterMovement : PlayerMovement
+public class NPCPlayer : Player
 {
     [Header("IS MOVE")]
     public bool isMove,isDie;
@@ -18,9 +18,18 @@ public class CharacterMovement : PlayerMovement
     {
         if (isNextPlayer)
         {
-            base.Update();
+            CreateEnemyList();
+            Nearest();
+            //base.Update();
         }
-        
+        if (GameManager.instance.currentGameState == GameManager.GameState.Climax && PlayerManager.instance.currentPlayerStates == PlayerStates.Attack)
+        {
+            if (isTargetAvailable)
+            {
+                Chase(targetTransform);
+            }
+        }
+
     }
     protected override void Move()
     {
@@ -30,7 +39,13 @@ public class CharacterMovement : PlayerMovement
             
         }        
     }
-
+    public override void CheckHealth()
+    {
+        if (health <= 0)
+        {
+            Die(true);
+        }
+    }
     protected override void PlayerSideMoves(float x)
     {
         if (isMove)
@@ -62,9 +77,6 @@ public class CharacterMovement : PlayerMovement
                 PlayerManager.instance.npc.Add(this.gameObject);
             }
         }
-        if (other.CompareTag("EnemyTrigger"))
-        {
-            ClimaxIdleAnimation?.Invoke();
-        }
+
     }
 }

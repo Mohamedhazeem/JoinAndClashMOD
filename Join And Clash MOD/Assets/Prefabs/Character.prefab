@@ -1112,6 +1112,7 @@ MonoBehaviour:
   xMinimum: -4
   xMaximum: 4
   xMoveSpeed: 2
+  health: 15
   isMove: 0
   isDie: 0
   characterRenderer: {fileID: 8565101588355960000}
