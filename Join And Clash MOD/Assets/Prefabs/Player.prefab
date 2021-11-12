@@ -47,7 +47,7 @@ Animator:
   m_GameObject: {fileID: 23209451633886114}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 6c8ac8628ba785147adae213aaf9aecc, type: 3}
-  m_Controller: {fileID: 9100000, guid: 311f053a4201ebf4eb7d5e9733cf47f3, type: 2}
+  m_Controller: {fileID: 9100000, guid: d7e24272b9edc8f4986a57a7f4099770, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -101,10 +101,15 @@ MonoBehaviour:
   animator: {fileID: 6771593767982744418}
   capsuleCollider: {fileID: 0}
   capsuleColliderHeight: 0
+  castleEnemy: {fileID: 0}
+  targetTransform: {fileID: 0}
   moveSpeed: 4
   xMinimum: -4
   xMaximum: 4
   xMoveSpeed: 2
+  health: 50
+  attackPower: 10
+  isTargetAvailable: 0
 --- !u!135 &3530416975862991740
 SphereCollider:
   m_ObjectHideFlags: 0

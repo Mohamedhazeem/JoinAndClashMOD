@@ -9,6 +9,9 @@ public class PlayerManager : MonoBehaviour
     public delegate void ClimaxIdleAnimationCallback();
     public event ClimaxIdleAnimationCallback OnClimaxIdleAnimation;
 
+    public delegate void ClimaxWinAnimationCallback();
+    public event ClimaxWinAnimationCallback OnClimaxWinAnimation;
+
     [Header("Player Spawn Point")]
     public Transform playerSpawnPoint;
 
@@ -54,27 +57,43 @@ public class PlayerManager : MonoBehaviour
                 break;
 
             case PlayerStates.Running:
-                currentPlayerStates = PlayerStates.Idle;
+                //if(GameManager.instance.currentGameState != GameManager.GameState.Climax)
+                //{
+                //    currentPlayerStates = PlayerStates.Running;
+                //}
+                //else
+                //{
+                    currentPlayerStates = PlayerStates.Idle;
+                //}
+                
                 break;
 
             case PlayerStates.Attack:
+
                 break;
 
             case PlayerStates.Win:
+                OnClimaxWinAnimation?.Invoke();
                 break;
 
             case PlayerStates.Die:
                 break;
 
             case PlayerStates.ClimaxIdle:
-                OnClimaxIdleAnimation?.Invoke();
+                StartCoroutine(ClimaxIdleToRun());
+                OnClimaxIdleAnimation.Invoke();
+                Debug.Log("call");
                 break;
 
             default:
                 break;
         }
     }
-
+    IEnumerator ClimaxIdleToRun()
+    {
+        yield return new WaitForSeconds(1f);
+        currentPlayerStates = PlayerStates.Attack;
+    }
     public Transform PlayerAndNPCTransform()
     {
         if (npc.Count > 0 && currentPlayer.activeInHierarchy)

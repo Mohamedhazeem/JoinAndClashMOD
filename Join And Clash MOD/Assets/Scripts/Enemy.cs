@@ -79,7 +79,6 @@ public class Enemy : MonoBehaviour
     {
         animator.SetTrigger(Animator.StringToHash("Die"));
         capsuleCollider.height = capsuleColliderHeight;
-       // gameObject.tag = "Default";
         EnemyManager.instance.enemyList.Remove(this.gameObject);
         Destroy(this.gameObject,0.5f);
     }

@@ -1,16 +1,21 @@
 using System.Collections;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class Player : MonoBehaviour
 {
-    protected delegate void OnClimaxIdleAnimationCallBack();
-    protected OnClimaxIdleAnimationCallBack ClimaxIdleAnimation;
+
 
     [Header("Animator")]
     public Animator animator;
     [Header("Capsule collider")]
     public CapsuleCollider capsuleCollider;
     public float capsuleColliderHeight;
+
+    [Header("Castle Enemy")]
+    public CastleEnemy castleEnemy;
+    [Header("Enemy Transform")]
+    public Transform targetTransform;
+
     [Header("Move Speed")]
     [SerializeField] private float moveSpeed;
     [Header("Clamp Value on X Axis")]
@@ -18,9 +23,16 @@ public class PlayerMovement : MonoBehaviour
     [Header("Move speed on X Axis")]
     [SerializeField] private float xMoveSpeed;
 
-    private RaycastHit hit;
+    [Header("Health")]
+    public float health;   
+    [Header("Attack Power")]
+    public float attackPower;
 
-    protected virtual void Start()
+    private RaycastHit hit;
+    public bool isTargetAvailable;
+    public bool isPlayerDead;
+
+    protected void Start()
     {
         InputManager.instance.OnMouseHold += Move;
         InputManager.instance.OnMouseUp += Idle;
@@ -29,57 +41,159 @@ public class PlayerMovement : MonoBehaviour
         
         capsuleCollider = GetComponent<CapsuleCollider>();
         PlayerManager.instance.OnClimaxIdleAnimation += Idle;
-        //StartCoroutine("NearestEnemy");
+        PlayerManager.instance.OnClimaxWinAnimation += Win;
+
+        isPlayerDead = false;
     }
     protected virtual void Update()
     {
         CreateEnemyList();
         Nearest();
+
+        if (GameManager.instance.currentGameState == GameManager.GameState.Climax && (PlayerManager.instance.currentPlayerStates == PlayerStates.Running ||PlayerManager.instance.currentPlayerStates == PlayerStates.Attack))
+        {
+            if (isTargetAvailable)
+            {
+                Chase(targetTransform);
+            }           
+        }
     }
-    protected void StartRunAnimation()
+    public void Chase(Transform target)
+    {
+        if (target != null)
+        {
+            if (Vector3.Distance(transform.position, target.position) > 4)
+            {
+                var pos = target.position;
+                pos.y = 0.25f;
+                target.position = pos;
+                transform.LookAt(target);
+                transform.Translate(transform.forward * moveSpeed * Time.deltaTime, Space.World);
+                StartRunAnimation();
+            }
+            else
+            {
+                AttackAnimation();
+            }
+        }
+        else
+        {
+            var newTarget = EnemyManager.instance.EnemyTransform();
+            Debug.Log(newTarget);
+            if (newTarget != null)
+            {
+                targetTransform = newTarget;
+                castleEnemy = targetTransform.GetComponent<CastleEnemy>();
+            }
+            else
+            {
+                PlayerManager.instance.currentPlayerStates = PlayerStates.Win;
+                Win();
+                PlayerManager.instance.SwitchPlayerState();
+                isTargetAvailable = false;
+            }
+        }
+    }
+    protected virtual void StartRunAnimation()
     {
         if (PlayerManager.instance.currentPlayerStates == PlayerStates.Running && GameManager.instance.currentGameState == GameManager.GameState.GamePlay)
         {
-            animator.SetTrigger(Animator.StringToHash("Run"));
+            //animator.SetTrigger(Animator.StringToHash("Run"));
+            // animator.ResetTrigger("Idle");
+            animator.SetBool(Animator.StringToHash("Idle"), false);
+            animator.SetBool(Animator.StringToHash("Run"), true);
+        }
+        else if(PlayerManager.instance.currentPlayerStates == PlayerStates.Attack && GameManager.instance.currentGameState == GameManager.GameState.Climax)
+        {
+            animator.SetBool(Animator.StringToHash("Idle"), false);
+            animator.SetBool(Animator.StringToHash("Run"), true);
+           // animator.SetTrigger(Animator.StringToHash("Run"));
         }
     }
     protected virtual void Move()
     {        
         transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime, Space.World);
     }
-    protected virtual void Idle()
+    protected void Idle()
     {
         if (PlayerManager.instance.currentPlayerStates == PlayerStates.Idle && GameManager.instance.currentGameState == GameManager.GameState.GamePlay)
         {
-            animator.SetTrigger(Animator.StringToHash("Idle"));
+            animator.SetBool(Animator.StringToHash("Run"), false);
+            animator.SetBool(Animator.StringToHash("Idle"), true);
         }
         else if(PlayerManager.instance.currentPlayerStates == PlayerStates.ClimaxIdle && GameManager.instance.currentGameState == GameManager.GameState.Climax)
         {
-            animator.SetTrigger(Animator.StringToHash("Idle"));
+            Debug.Log("called");
+            animator.SetBool(Animator.StringToHash("Run"), false);
+            animator.SetBool(Animator.StringToHash("Idle"), true);
         }
+
+    }
+    protected void Win()
+    {
+        if(PlayerManager.instance.currentPlayerStates == PlayerStates.Win)
+        {
+            animator.SetBool(Animator.StringToHash("Attack"), false);
+            animator.SetBool(Animator.StringToHash("Win"), true);
+            
+        }
+    }
+    public virtual void CheckHealth()
+    {
+        if (health <= 0)
+        {
+            Die(false);
+        }
+    }
+    protected void AttackAnimation()
+    {
+        animator.SetBool(Animator.StringToHash("Attack"), true);
     }
     protected void Die(bool isNpc)
     {
         animator.SetTrigger(Animator.StringToHash("Die"));
         capsuleCollider.height = capsuleColliderHeight;
-        ChooseNextPlayer();
+       
 
         InputManager.instance.OnMouseHold -= Move;
         InputManager.instance.OnMouseUp -= Idle;
         InputManager.instance.OnMouseDown -= StartRunAnimation;
         InputManager.instance.OnMouseDrag -= PlayerSideMoves;
 
-        if (isNpc)
+        //PlayerManager.instance.OnClimaxIdleAnimation += Idle;
+        //PlayerManager.instance.OnClimaxWinAnimation += Win;
+
+        if (PlayerManager.instance.npc.Contains(gameObject))
+        {
+            PlayerManager.instance.npc.Remove(gameObject);
+        }
+
+        if (isNpc && isPlayerDead)
         {
             Destroy(gameObject, 1f);
         }
         else
-        {
-            Invoke("DisablePlayer",1f);
+        {           
+            Invoke("DisablePlayer",0f);
+            ChooseNextPlayer();
+            isPlayerDead = true;
         }
        
     }
+    public virtual void Attack()
+    {
+        if (targetTransform != null)
+        {
+            castleEnemy.health -= attackPower;
+            if (castleEnemy.health <= 0)
+            {
+                castleEnemy.CheckHealth();
+                targetTransform = null;
+                castleEnemy = null;
+            }
 
+        }
+    }
     protected virtual void PlayerSideMoves(float x)
     {
         transform.Translate(Vector3.right * x* xMoveSpeed * Time.deltaTime, Space.World);
@@ -96,10 +210,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("EnemyTrigger"))
-        {
-            ClimaxIdleAnimation?.Invoke();
-        }
+        
     }
     private void OnDisable()
     {
@@ -133,9 +244,9 @@ public class PlayerMovement : MonoBehaviour
                     var enemy = EnemyManager.instance.enemyList[i].GetComponent<Enemy>();
                     enemy.isMove = true;
                     EnemyManager.instance.currentEnemyStates = EnemyStates.Chase;
-                    if (PlayerManager.instance.npc.Count > 0)
+                    if (PlayerManager.instance.npc.Count > 0 && GameManager.instance.currentGameState != GameManager.GameState.Climax)
                     {
-                        var npc = PlayerManager.instance.npc[0].GetComponent<CharacterMovement>();
+                        var npc = PlayerManager.instance.npc[0].GetComponent<NPCPlayer>();
                         npc.moveSpeed = 8;
                         var pos = npc.transform.position;
                         var x = Mathf.Lerp(pos.x, enemy.transform.position.x, Time.deltaTime * 20f);
@@ -179,7 +290,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if(PlayerManager.instance.npc.Count > 0 && !PlayerManager.instance.currentPlayer.activeInHierarchy)
         {
-            PlayerManager.instance.npc[0].GetComponent<CharacterMovement>().isNextPlayer = true;
+            PlayerManager.instance.npc[0].GetComponent<NPCPlayer>().isNextPlayer = true;
             CameraManager.instance.target = PlayerManager.instance.npc[0].transform;
         }
     }
