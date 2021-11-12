@@ -87,6 +87,7 @@ public class NPCPlayer : Player
             {
                 animator.SetBool(Animator.StringToHash("Run"), true);
                 characterRenderer.material = PlayerManager.instance.playerMaterial;
+                Debug.LogError("QWERTy");
             }
           
             if (!PlayerManager.instance.npc.Contains(this.gameObject))

@@ -30,6 +30,7 @@ public class Player : MonoBehaviour
 
     private RaycastHit hit;
     public bool isTargetAvailable;
+    public bool isPlayerDead;
 
     protected void Start()
     {
@@ -41,6 +42,8 @@ public class Player : MonoBehaviour
         capsuleCollider = GetComponent<CapsuleCollider>();
         PlayerManager.instance.OnClimaxIdleAnimation += Idle;
         PlayerManager.instance.OnClimaxWinAnimation += Win;
+
+        isPlayerDead = false;
     }
     protected virtual void Update()
     {
@@ -150,25 +153,30 @@ public class Player : MonoBehaviour
     {
         animator.SetTrigger(Animator.StringToHash("Die"));
         capsuleCollider.height = capsuleColliderHeight;
-        ChooseNextPlayer();
+       
 
         InputManager.instance.OnMouseHold -= Move;
         InputManager.instance.OnMouseUp -= Idle;
         InputManager.instance.OnMouseDown -= StartRunAnimation;
         InputManager.instance.OnMouseDrag -= PlayerSideMoves;
 
+        //PlayerManager.instance.OnClimaxIdleAnimation += Idle;
+        //PlayerManager.instance.OnClimaxWinAnimation += Win;
+
         if (PlayerManager.instance.npc.Contains(gameObject))
         {
             PlayerManager.instance.npc.Remove(gameObject);
         }
 
-        if (isNpc)
+        if (isNpc && isPlayerDead)
         {
             Destroy(gameObject, 1f);
         }
         else
-        {
-            Invoke("DisablePlayer",1f);
+        {           
+            Invoke("DisablePlayer",0f);
+            ChooseNextPlayer();
+            isPlayerDead = true;
         }
        
     }
