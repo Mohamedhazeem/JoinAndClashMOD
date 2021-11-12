@@ -7,10 +7,16 @@ public class EnemyTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("A");
         GameManager.instance.currentGameState = GameManager.GameState.Climax;
+        Debug.Log("b");
         PlayerManager.instance.currentPlayerStates = PlayerStates.ClimaxIdle;
-        EnemyManager.instance.StartSpawningEnemies();
+        Debug.Log("c");
         PlayerManager.instance.SwitchPlayerState();
-        Destroy(this.gameObject, 0.5f);
+        Debug.Log("d");
+        EnemyManager.instance.StartSpawningEnemies();
+        Debug.Log("e");
+        gameObject.SetActive(false);
+        //Destroy(this.gameObject, 1f);
     }
 }

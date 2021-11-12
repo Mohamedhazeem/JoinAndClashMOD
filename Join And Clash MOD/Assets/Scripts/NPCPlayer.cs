@@ -3,16 +3,22 @@ using UnityEngine;
 public class NPCPlayer : Player
 {
     [Header("IS MOVE")]
-    public bool isMove,isDie;
+    public bool isMove,isDie,isTriggerByPlayer;
     [Header("Renderer")]
     public Renderer characterRenderer;
 
     public bool isNextPlayer;
-    protected override void Start()
+    protected new void Start()
     {
-        isMove = isDie = isNextPlayer = false;
-        //ClimaxIdleAnimation += Idle;
-        base.Start();
+        isMove = isDie = isNextPlayer = isTriggerByPlayer= false;
+        InputManager.instance.OnMouseHold += Move;
+        InputManager.instance.OnMouseUp += Idle;
+        InputManager.instance.OnMouseDown += StartRunAnimation;
+        InputManager.instance.OnMouseDrag += PlayerSideMoves;
+
+        capsuleCollider = GetComponent<CapsuleCollider>();
+        PlayerManager.instance.OnClimaxIdleAnimation += Idle;
+        PlayerManager.instance.OnClimaxWinAnimation += Win;
     }
     protected override void Update()
     {//base.Update();
@@ -20,7 +26,6 @@ public class NPCPlayer : Player
         {
             CreateEnemyList();
             Nearest();
-            //base.Update();
         }
         if (GameManager.instance.currentGameState == GameManager.GameState.Climax && PlayerManager.instance.currentPlayerStates == PlayerStates.Attack)
         {
@@ -38,6 +43,14 @@ public class NPCPlayer : Player
             base.Move();
             
         }        
+    }
+    protected override void StartRunAnimation()
+    {
+        if (isMove)
+        {
+            base.StartRunAnimation();
+        }
+        
     }
     public override void CheckHealth()
     {
@@ -70,12 +83,18 @@ public class NPCPlayer : Player
         {
             isMove = true;
             transform.tag = other.transform.tag;
-            animator.SetTrigger(Animator.StringToHash("ToIdle"));
-            characterRenderer.material = PlayerManager.instance.playerMaterial;
+            if (!isTriggerByPlayer)
+            {
+                animator.SetBool(Animator.StringToHash("Run"), true);
+                characterRenderer.material = PlayerManager.instance.playerMaterial;
+            }
+          
             if (!PlayerManager.instance.npc.Contains(this.gameObject))
             {
                 PlayerManager.instance.npc.Add(this.gameObject);
             }
+
+            isTriggerByPlayer = true;
         }
 
     }

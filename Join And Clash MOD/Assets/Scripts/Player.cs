@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
     private RaycastHit hit;
     public bool isTargetAvailable;
 
-    protected virtual void Start()
+    protected void Start()
     {
         InputManager.instance.OnMouseHold += Move;
         InputManager.instance.OnMouseUp += Idle;
@@ -91,16 +91,18 @@ public class Player : MonoBehaviour
             }
         }
     }
-    protected void StartRunAnimation()
+    protected virtual void StartRunAnimation()
     {
         if (PlayerManager.instance.currentPlayerStates == PlayerStates.Running && GameManager.instance.currentGameState == GameManager.GameState.GamePlay)
         {
             //animator.SetTrigger(Animator.StringToHash("Run"));
-            
+            // animator.ResetTrigger("Idle");
+            animator.SetBool(Animator.StringToHash("Idle"), false);
             animator.SetBool(Animator.StringToHash("Run"), true);
         }
         else if(PlayerManager.instance.currentPlayerStates == PlayerStates.Attack && GameManager.instance.currentGameState == GameManager.GameState.Climax)
         {
+            animator.SetBool(Animator.StringToHash("Idle"), false);
             animator.SetBool(Animator.StringToHash("Run"), true);
            // animator.SetTrigger(Animator.StringToHash("Run"));
         }
@@ -113,15 +115,14 @@ public class Player : MonoBehaviour
     {
         if (PlayerManager.instance.currentPlayerStates == PlayerStates.Idle && GameManager.instance.currentGameState == GameManager.GameState.GamePlay)
         {
-            Debug.Log("1");
             animator.SetBool(Animator.StringToHash("Run"), false);
-            animator.SetTrigger(Animator.StringToHash("Idle"));
+            animator.SetBool(Animator.StringToHash("Idle"), true);
         }
         else if(PlayerManager.instance.currentPlayerStates == PlayerStates.ClimaxIdle && GameManager.instance.currentGameState == GameManager.GameState.Climax)
         {
-            Debug.Log("Working");
+            Debug.Log("called");
             animator.SetBool(Animator.StringToHash("Run"), false);
-            animator.SetTrigger(Animator.StringToHash("Idle"));
+            animator.SetBool(Animator.StringToHash("Idle"), true);
         }
 
     }

@@ -80,8 +80,9 @@ public class PlayerManager : MonoBehaviour
                 break;
 
             case PlayerStates.ClimaxIdle:
+                //StartCoroutine(ClimaxIdleToRun());
                 OnClimaxIdleAnimation?.Invoke();
-                StartCoroutine(ClimaxIdleToRun());
+                Debug.Log("call");
                 break;
 
             default:
