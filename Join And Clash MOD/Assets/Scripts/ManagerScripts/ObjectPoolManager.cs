@@ -27,10 +27,6 @@ public class ObjectPoolManager : MonoBehaviour
 
          ObjectPoolInstantiate();
     }
-    private void Start()
-    {
-        
-    }
     private void AssignInstance()
     {
         if (instance == null)
@@ -84,7 +80,6 @@ public class ObjectPoolManager : MonoBehaviour
         if (!poolDictionary.ContainsKey(gameObject.name))
         {
             GameObject newGameObject = Instantiate(gameObject);
-            Debug.LogError(newGameObject);
             newGameObject.name = gameObject.name;
             return newGameObject;
         }

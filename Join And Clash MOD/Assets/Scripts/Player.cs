@@ -1,10 +1,7 @@
 using System.Collections;
 using UnityEngine;
-
 public class Player : MonoBehaviour
 {
-
-
     [Header("Animator")]
     public Animator animator;
     [Header("Capsule collider")]
@@ -22,6 +19,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float xMinimum,xMaximum;
     [Header("Move speed on X Axis")]
     [SerializeField] private float xMoveSpeed;
+    [Header("Move speed on NPC")]
+    [SerializeField] private float xMoveSpeedNPC;
 
     [Header("Health")]
     public float health;   
@@ -39,12 +38,13 @@ public class Player : MonoBehaviour
         InputManager.instance.OnMouseDown += StartRunAnimation;
         InputManager.instance.OnMouseDrag += PlayerSideMoves;
         
-        capsuleCollider = GetComponent<CapsuleCollider>();
         PlayerManager.instance.OnClimaxIdleAnimation += Idle;
         PlayerManager.instance.OnClimaxWinAnimation += Win;
 
+        capsuleCollider = GetComponent<CapsuleCollider>();
         isPlayerDead = false;
     }
+  
     protected virtual void Update()
     {
         CreateEnemyList();
@@ -79,7 +79,7 @@ public class Player : MonoBehaviour
         else
         {
             var newTarget = EnemyManager.instance.EnemyTransform();
-            Debug.Log(newTarget);
+
             if (newTarget != null)
             {
                 targetTransform = newTarget;
@@ -123,7 +123,6 @@ public class Player : MonoBehaviour
         }
         else if(PlayerManager.instance.currentPlayerStates == PlayerStates.ClimaxIdle && GameManager.instance.currentGameState == GameManager.GameState.Climax)
         {
-            Debug.Log("called");
             animator.SetBool(Animator.StringToHash("Run"), false);
             animator.SetBool(Animator.StringToHash("Idle"), true);
         }
@@ -154,14 +153,13 @@ public class Player : MonoBehaviour
         animator.SetTrigger(Animator.StringToHash("Die"));
         capsuleCollider.height = capsuleColliderHeight;
        
-
         InputManager.instance.OnMouseHold -= Move;
         InputManager.instance.OnMouseUp -= Idle;
         InputManager.instance.OnMouseDown -= StartRunAnimation;
         InputManager.instance.OnMouseDrag -= PlayerSideMoves;
-
-        //PlayerManager.instance.OnClimaxIdleAnimation += Idle;
-        //PlayerManager.instance.OnClimaxWinAnimation += Win;
+        
+        PlayerManager.instance.OnClimaxIdleAnimation -= Idle;
+        PlayerManager.instance.OnClimaxWinAnimation -= Win;
 
         if (PlayerManager.instance.npc.Contains(gameObject))
         {
@@ -208,10 +206,10 @@ public class Player : MonoBehaviour
             Die(false);
         }
     }
-    private void OnTriggerEnter(Collider other)
-    {
+    //private void OnTriggerEnter(Collider other)
+    //{
         
-    }
+    //}
     private void OnDisable()
     {
         Die(false);
@@ -248,8 +246,9 @@ public class Player : MonoBehaviour
                     {
                         var npc = PlayerManager.instance.npc[0].GetComponent<NPCPlayer>();
                         npc.moveSpeed = 8;
+                        npc.RemoveFromInputManager();
                         var pos = npc.transform.position;
-                        var x = Mathf.Lerp(pos.x, enemy.transform.position.x, Time.deltaTime * 20f);
+                        var x = Mathf.Lerp(pos.x, enemy.transform.position.x, Time.deltaTime * xMoveSpeedNPC);
                         pos.x = x;
                         npc.transform.position = pos;
                     }

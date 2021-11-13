@@ -15,6 +15,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float moveSpeed;
 
     public bool isMove;
+    private float timeToDisabled = 5f;
+
     protected virtual void Start()
     {
         capsuleCollider = GetComponent<CapsuleCollider>();
@@ -25,6 +27,7 @@ public class Enemy : MonoBehaviour
         {
             Move();
         }
+        DiableEnemy();   
     }
     protected void StartRunAnimation()
     {
@@ -101,6 +104,20 @@ public class Enemy : MonoBehaviour
         else
         {         
             return false;
+        }
+    }
+    private void DiableEnemy()
+    {
+        if (HasPlayerPassed())
+        {
+            if (timeToDisabled > 0)
+            {
+                timeToDisabled -= Time.deltaTime;
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
         }
     }
 }

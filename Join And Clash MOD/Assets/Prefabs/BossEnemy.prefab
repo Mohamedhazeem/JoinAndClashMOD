@@ -1022,7 +1022,7 @@ GameObject:
   - component: {fileID: 9062896862019846470}
   - component: {fileID: 349107022619531714}
   m_Layer: 6
-  m_Name: Enemy
+  m_Name: BossEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1037,7 +1037,7 @@ Transform:
   m_GameObject: {fileID: 7911285091610097054}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8905652496214543900}
   - {fileID: 3085253267630673840}
@@ -1054,7 +1054,7 @@ Animator:
   m_GameObject: {fileID: 7911285091610097054}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 6c8ac8628ba785147adae213aaf9aecc, type: 3}
-  m_Controller: {fileID: 9100000, guid: d7c36e6acb5b48f4b9ade6a0f1530b26, type: 2}
+  m_Controller: {fileID: 9100000, guid: 36a2495d8ff42d147972aab4e4079aa2, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

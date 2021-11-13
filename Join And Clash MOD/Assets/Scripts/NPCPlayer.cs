@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class NPCPlayer : Player
@@ -8,17 +9,20 @@ public class NPCPlayer : Player
     public Renderer characterRenderer;
 
     public bool isNextPlayer;
+    private bool isEnemyAssignedInGamePlay;
+
     protected new void Start()
     {
-        isMove = isDie = isNextPlayer = isTriggerByPlayer= false;
+        isMove = isDie = isNextPlayer = isTriggerByPlayer = false;
         InputManager.instance.OnMouseHold += Move;
         InputManager.instance.OnMouseUp += Idle;
         InputManager.instance.OnMouseDown += StartRunAnimation;
         InputManager.instance.OnMouseDrag += PlayerSideMoves;
 
-        capsuleCollider = GetComponent<CapsuleCollider>();
         PlayerManager.instance.OnClimaxIdleAnimation += Idle;
         PlayerManager.instance.OnClimaxWinAnimation += Win;
+
+        capsuleCollider = GetComponent<CapsuleCollider>();        
     }
     protected override void Update()
     {//base.Update();
@@ -34,14 +38,16 @@ public class NPCPlayer : Player
                 Chase(targetTransform);
             }
         }
-
+        if (isEnemyAssignedInGamePlay)
+        {
+            Move();
+        }
     }
     protected override void Move()
     {
         if (isMove)
         {
-            base.Move();
-            
+            base.Move();            
         }        
     }
     protected override void StartRunAnimation()
@@ -87,7 +93,6 @@ public class NPCPlayer : Player
             {
                 animator.SetBool(Animator.StringToHash("Run"), true);
                 characterRenderer.material = PlayerManager.instance.playerMaterial;
-                Debug.LogError("QWERTy");
             }
           
             if (!PlayerManager.instance.npc.Contains(this.gameObject))
@@ -97,6 +102,17 @@ public class NPCPlayer : Player
 
             isTriggerByPlayer = true;
         }
+
+    }
+
+    public void RemoveFromInputManager()
+    {
+        InputManager.instance.OnMouseHold -= Move;
+        InputManager.instance.OnMouseUp -= Idle;
+        InputManager.instance.OnMouseDown -= StartRunAnimation;
+        InputManager.instance.OnMouseDrag -= PlayerSideMoves;
+
+        isEnemyAssignedInGamePlay = true;
 
     }
 }

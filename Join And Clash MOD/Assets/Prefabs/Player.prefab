@@ -107,9 +107,11 @@ MonoBehaviour:
   xMinimum: -4
   xMaximum: 4
   xMoveSpeed: 2
-  health: 50
+  xMoveSpeedNPC: 2
+  health: 30
   attackPower: 10
   isTargetAvailable: 0
+  isPlayerDead: 0
 --- !u!135 &3530416975862991740
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -57,15 +57,7 @@ public class PlayerManager : MonoBehaviour
                 break;
 
             case PlayerStates.Running:
-                //if(GameManager.instance.currentGameState != GameManager.GameState.Climax)
-                //{
-                //    currentPlayerStates = PlayerStates.Running;
-                //}
-                //else
-                //{
-                    currentPlayerStates = PlayerStates.Idle;
-                //}
-                
+                    currentPlayerStates = PlayerStates.Idle;                
                 break;
 
             case PlayerStates.Attack:
@@ -82,7 +74,7 @@ public class PlayerManager : MonoBehaviour
             case PlayerStates.ClimaxIdle:
                 StartCoroutine(ClimaxIdleToRun());
                 OnClimaxIdleAnimation.Invoke();
-                Debug.Log("call");
+
                 break;
 
             default:
