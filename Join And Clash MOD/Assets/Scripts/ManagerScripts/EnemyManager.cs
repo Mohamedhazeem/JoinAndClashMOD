@@ -17,11 +17,15 @@ public class EnemyManager : MonoBehaviour
 
     public GameObject enemyPrefab;
     public GameObject enemiesSpawnPoint;
-    private Vector3 enemyPositionOnSpawnPoint = new Vector3();
+
+    public bool isBossFight;
+    public GameObject bossEnemy;
     private void Awake()
     {        
         AssignInstance();
     }
+
+  
 
     private void AssignInstance()
     {
@@ -37,6 +41,7 @@ public class EnemyManager : MonoBehaviour
     private void Start()
     {
         spawnEnemies = SpawnEnemies;
+        
         currentEnemyStates = EnemyStates.Idle;
         waitForSeconds = new WaitForSeconds(enemySpawnTime);
     }
@@ -79,15 +84,23 @@ public class EnemyManager : MonoBehaviour
             currentEnemyStates = EnemyStates.Chase;
 
             player.castleEnemy = castleEnemy;
-            player.targetTransform = EnemyTransform();//gameObject.transform;
+            player.targetTransform = EnemyTransform();
             player.isTargetAvailable = true;
+        }
+    }
+    public void AssignToBoss()
+    {
+        if (PlayerManager.instance.npc.Count > 0) 
+        {
+            var boss = bossEnemy.GetComponent<BossEnemy>();
+            boss.isTargetAvailable = true;
+            boss.targetTransform = PlayerManager.instance.PlayerAndNPCTransform();
         }
     }
     public Transform EnemyTransform()
     {
         if (enemyList.Count > 0 )
         {
-
             var transform = Random.Range(0, enemyList.Count);
             return enemyList[transform].transform;
         }

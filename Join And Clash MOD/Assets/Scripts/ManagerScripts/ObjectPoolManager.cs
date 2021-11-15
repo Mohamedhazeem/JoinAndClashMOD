@@ -8,7 +8,6 @@ public class ObjectPoolManager : MonoBehaviour
 
     public List<ObjectForPool> objectForPools;
     internal Dictionary<string, Queue<GameObject>> poolDictionary;
-
     void Awake()
     {
         AssignInstance();
@@ -157,8 +156,7 @@ public class ObjectPoolManager : MonoBehaviour
                 gameObject.SetActive(false);
 
                 poolDictionary.Add(gameobjectName, poolQueue);
-            }
-         
+            }         
         }
         else
         {

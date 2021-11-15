@@ -49,6 +49,11 @@ public class LevelSpawnManager : MonoBehaviour
                         {
                             PlayerManager.instance.playerSpawnPoint = gameObject.transform;
                         }
+                        else if (gameObject.CompareTag("BossEnemy"))
+                        {
+                            EnemyManager.instance.isBossFight = true;
+                            EnemyManager.instance.bossEnemy = gameObject;
+                        }
                     }
 
                 }
