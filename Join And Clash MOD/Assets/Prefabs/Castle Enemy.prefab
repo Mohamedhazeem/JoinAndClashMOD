@@ -1019,7 +1019,6 @@ GameObject:
   - component: {fileID: 3486203479822628190}
   - component: {fileID: 7489100646985895721}
   - component: {fileID: 5259353704471419896}
-  - component: {fileID: 9062896862019846470}
   - component: {fileID: 2574590072391503985}
   m_Layer: 6
   m_Name: Castle Enemy
@@ -1092,19 +1091,6 @@ CapsuleCollider:
   m_Radius: 0.8
   m_Height: 4
   m_Direction: 1
-  m_Center: {x: 0, y: 2, z: 0}
---- !u!135 &9062896862019846470
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7911285091610097054}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 2
   m_Center: {x: 0, y: 2, z: 0}
 --- !u!114 &2574590072391503985
 MonoBehaviour:

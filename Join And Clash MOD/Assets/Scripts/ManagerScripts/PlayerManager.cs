@@ -48,7 +48,7 @@ public class PlayerManager : MonoBehaviour
         currentPlayerStates = PlayerStates.Idle;
     }
   
-    public void SwitchPlayerState()
+    public void SwitchPlayerStates()
     {
         switch (currentPlayerStates)
         {
@@ -105,6 +105,7 @@ public class PlayerManager : MonoBehaviour
         }
         else if(npc.Count == 0 && currentPlayer.activeInHierarchy)
         {
+            npc.Add(currentPlayer);
             return currentPlayer.transform;
         }
         else

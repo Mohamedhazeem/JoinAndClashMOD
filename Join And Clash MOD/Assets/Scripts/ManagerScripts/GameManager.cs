@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
     {
         currentGameState = GameState.Menu;
     }
-    public void SwitchState()
+    public void SwitchGameStates()
     {
         switch (currentGameState)
         {
@@ -48,9 +48,12 @@ public class GameManager : MonoBehaviour
                 break;
 
             case GameState.Win:
+                UserDataManager.instance.SaveCurrentLevelCount();
+                UIManager.instance.NextSceneButtonSetActive();
                 break;
 
             case GameState.Lose:
+                UIManager.instance.RestartSceneButtonSetActive();
                 break;
 
             case GameState.Climax:

@@ -52,7 +52,7 @@ public class LevelSpawnManager : MonoBehaviour
                         else if (gameObject.CompareTag("BossEnemy"))
                         {
                             EnemyManager.instance.isBossFight = true;
-                            EnemyManager.instance.bossEnemy = gameObject;
+                            EnemyManager.instance.bossEnemy = gameObject.GetComponent<BossEnemy>();
                         }
                     }
 

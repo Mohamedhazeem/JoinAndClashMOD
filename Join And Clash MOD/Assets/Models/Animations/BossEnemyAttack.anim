@@ -139660,14 +139660,14 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 1.5
-    functionName: Attack
+    functionName: AttackPlayer
     data: 
     objectReferenceParameter: {fileID: 7911285091610097054, guid: 0c9ab5bf16a80af4da6e48614fb6c443, type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 3
-    functionName: Attack
+    functionName: AttackPlayer
     data: 
     objectReferenceParameter: {fileID: 7911285091610097054, guid: 0c9ab5bf16a80af4da6e48614fb6c443, type: 3}
     floatParameter: 0

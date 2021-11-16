@@ -15,8 +15,17 @@ public class CastleEnemy : Enemy
     {
         base.Start();
         isTargetAvailable = true;
+        PlayerManager.instance.OnClimaxWinAnimation += Win;
     }
 
+    private void Win()
+    {
+        if (EnemyManager.instance.currentEnemyStates == EnemyStates.Win)
+        {
+            animator.SetBool(Animator.StringToHash("Attack"), false);
+            animator.SetTrigger(Animator.StringToHash("Win"));
+        }
+    }
     protected override void Update()
     {
         
@@ -52,8 +61,10 @@ public class CastleEnemy : Enemy
             }
             else
             {
-                EnemyManager.instance.currentEnemyStates = EnemyStates.Idle;
-                Idle(); 
+                EnemyManager.instance.currentEnemyStates = EnemyStates.Win;
+                GameManager.instance.currentGameState = GameManager.GameState.Lose;
+                EnemyManager.instance.SwitchEnemyStates();
+                GameManager.instance.SwitchGameStates();
                 isTargetAvailable = false;
             }
         }

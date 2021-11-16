@@ -1,25 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class BossEnemy : MonoBehaviour
 {
     [Header("Animator")]
     public Animator animator;
+
+    [Header("Capsule collider")]
+    public CapsuleCollider capsuleCollider;
+    public float capsuleColliderHeight;
+
     [Header("Target")]
     public Transform targetTransform;
-    public bool isTargetAvailable;
+    public bool isTargetAvailable = false;
+
     [Header("Player Component")]
     public Player player;
+
     [Header("Health")]
     public float health;
+
     [Header("Attack Power")]
     public float attackPower;
 
-    public void Start()
-    {
-        isTargetAvailable = true;
-    }
     public void Update()
     {
         if (isTargetAvailable)
@@ -31,8 +34,13 @@ public class BossEnemy : MonoBehaviour
     {
         if (target != null)
         {
-            if (Vector3.Distance(transform.position, target.position) < 2)
+            if (Vector3.Distance(transform.position, target.position) < 6)
             {
+                var pos = target.position;
+                pos.y = 0.25f;
+                target.position = pos;
+                transform.LookAt(target);
+                EnemyManager.instance.currentEnemyStates = EnemyStates.Attack;
                 AttackAnimation();
             }
         }
@@ -47,13 +55,15 @@ public class BossEnemy : MonoBehaviour
             }
             else
             {
-                EnemyManager.instance.currentEnemyStates = EnemyStates.Idle;
-                Idle();
+                EnemyManager.instance.currentEnemyStates = EnemyStates.Win;
+                GameManager.instance.currentGameState = GameManager.GameState.Lose;
+                EnemyManager.instance.SwitchEnemyStates();
+                GameManager.instance.SwitchGameStates();         
                 isTargetAvailable = false;
             }
         }
     }
-    public void Attack()
+    public void AttackPlayer()
     {
         if (targetTransform != null)
         {
@@ -70,12 +80,41 @@ public class BossEnemy : MonoBehaviour
     {
         if (EnemyManager.instance.currentEnemyStates == EnemyStates.Idle)
         {
+            animator.SetBool(Animator.StringToHash("Attack"), false);
             animator.SetBool(Animator.StringToHash("Idle"), true);
         }
     }
     public void AttackAnimation()
     {
-        animator.SetBool(Animator.StringToHash("Attack"), true);
+        if (EnemyManager.instance.currentEnemyStates == EnemyStates.Attack)
+        {
+            animator.SetBool(Animator.StringToHash("Idle"), false);
+            animator.SetBool(Animator.StringToHash("Attack"), true);
+        }
+    }
+    public void Win()
+    {
+        if (EnemyManager.instance.currentEnemyStates == EnemyStates.Win)
+        {
+            animator.SetBool(Animator.StringToHash("Attack"), false);
+            animator.SetTrigger(Animator.StringToHash("Win"));
+        }        
+    }
+
+    internal void CheckHealth()
+    {
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        animator.SetTrigger(Animator.StringToHash("Die"));
+        capsuleCollider.height = capsuleColliderHeight;
+        EnemyManager.instance.enemyList.Remove(this.gameObject);
+        Destroy(this.gameObject, 0.5f);
     }
 }
 

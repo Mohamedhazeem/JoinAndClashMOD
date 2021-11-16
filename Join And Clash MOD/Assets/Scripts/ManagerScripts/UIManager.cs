@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
@@ -11,7 +12,11 @@ public class UIManager : MonoBehaviour
     internal MenuState currentMenuState;
 
     [Header("Hold And Drag GameObject")]
-    [SerializeField]private GameObject HoldAndDrag_Text;
+    [SerializeField]private GameObject holdAndDragText;
+
+    [Header("Restart and Next Button GameObject")]
+    [SerializeField] private GameObject restartButton;
+    [SerializeField] private GameObject nextButton;
 
     private void Awake()
     {
@@ -20,7 +25,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         currentMenuState = MenuState.BeforeStart;
-        HoldAndDrag_Text.SetActive(true);
+        holdAndDragText.SetActive(true);
     }
     private void AssignInstance()
     {
@@ -40,12 +45,12 @@ public class UIManager : MonoBehaviour
         {
             case MenuState.BeforeStart:
                 currentMenuState = MenuState.Started;
-                HoldAndDrag_Text.SetActive(false);
+                holdAndDragText.SetActive(false);
                 break;
 
             case MenuState.Started:
                 currentMenuState = MenuState.BeforeStart;
-                HoldAndDrag_Text.SetActive(true);
+                holdAndDragText.SetActive(true);
                 break;
 
             default:
@@ -53,7 +58,23 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void SaveLevelData()
+    public void NextSceneButtonSetActive()
+    {
+        nextButton.SetActive(true);
+    }
+    public void RestartSceneButtonSetActive()
+    {
+        restartButton.SetActive(true);
+    }
+    public void NextScene()
+    {
+        SceneSwitchManager.instance.NextScene();
+    }
+    public void RestartScene()
+    {
+        SceneSwitchManager.instance.RestartScene();
+    }
+    public void SaveLevelData() // save level design
     {
         LevelManager.instance.Asign();
     }

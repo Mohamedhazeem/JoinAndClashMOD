@@ -5,6 +5,9 @@ public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance;
 
+    public delegate void ClimaxWinAnimationCallback();
+    public event ClimaxWinAnimationCallback OnClimaxWinAnimation;
+
     public EnemyStates currentEnemyStates;
     int enemySpawnCount = 1;
     private delegate void SpawnEnemiesCallBack();
@@ -19,14 +22,12 @@ public class EnemyManager : MonoBehaviour
     public GameObject enemiesSpawnPoint;
 
     public bool isBossFight;
-    public GameObject bossEnemy;
+    public BossEnemy bossEnemy;
+    public Transform bossEnemyTransform;
     private void Awake()
     {        
         AssignInstance();
     }
-
-  
-
     private void AssignInstance()
     {
         if (instance == null)
@@ -41,7 +42,10 @@ public class EnemyManager : MonoBehaviour
     private void Start()
     {
         spawnEnemies = SpawnEnemies;
-        
+        if(bossEnemy != null)
+        {
+            bossEnemyTransform = bossEnemy.transform;
+        }       
         currentEnemyStates = EnemyStates.Idle;
         waitForSeconds = new WaitForSeconds(enemySpawnTime);
     }
@@ -64,8 +68,7 @@ public class EnemyManager : MonoBehaviour
         else
         {
             StartCoroutine(SpawnEnemiesCouroutine(5));
-        }
-       
+        }       
     }
     IEnumerator SpawnEnemiesCouroutine(int enemyCount)
     {
@@ -90,11 +93,18 @@ public class EnemyManager : MonoBehaviour
     }
     public void AssignToBoss()
     {
-        if (PlayerManager.instance.npc.Count > 0) 
+        if (PlayerManager.instance.npc.Count >= 0) 
         {
-            var boss = bossEnemy.GetComponent<BossEnemy>();
-            boss.isTargetAvailable = true;
-            boss.targetTransform = PlayerManager.instance.PlayerAndNPCTransform();
+            bossEnemy.isTargetAvailable = true;
+            var targetTransform = PlayerManager.instance.PlayerAndNPCTransform();
+            var player = targetTransform.GetComponent<Player>();
+
+            bossEnemy.targetTransform = targetTransform;
+            bossEnemy.player = player;
+
+            player.targetTransform = bossEnemyTransform;
+            player.bossEnemy = bossEnemy;
+            player.isTargetAvailable = true;
         }
     }
     public Transform EnemyTransform()
@@ -107,6 +117,36 @@ public class EnemyManager : MonoBehaviour
         else
         {
             return null;
+        }
+    }
+    public void SwitchEnemyStates()
+    {
+        switch (currentEnemyStates)
+        {
+            case EnemyStates.Idle:
+
+                break;
+            case EnemyStates.Move:
+
+                break;
+            case EnemyStates.Chase:
+
+                break;
+
+            case EnemyStates.Attack:
+
+                break;
+
+            case EnemyStates.Win:
+                OnClimaxWinAnimation?.Invoke();
+                break;
+
+            case EnemyStates.Die:
+                break;
+
+            
+            default:
+                break;
         }
     }
 }

@@ -11,14 +11,14 @@ public class EnemyTrigger : MonoBehaviour
         {
             GameManager.instance.currentGameState = GameManager.GameState.Climax;
             PlayerManager.instance.currentPlayerStates = PlayerStates.ClimaxIdle;
-            PlayerManager.instance.SwitchPlayerState();
+            PlayerManager.instance.SwitchPlayerStates();
             if (!EnemyManager.instance.isBossFight)
             {
                 EnemyManager.instance.StartSpawningEnemies();
             }
             else
             {
-                EnemyManager.instance.AssignToBoss();
+                EnemyManager.instance.AssignToBoss();             
             }            
             gameObject.SetActive(false);
         }

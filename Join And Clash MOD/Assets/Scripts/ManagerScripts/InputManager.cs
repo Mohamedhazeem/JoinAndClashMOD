@@ -39,13 +39,13 @@ public class InputManager : MonoBehaviour
     {
         if (GameManager.instance.currentGameState == GameManager.GameState.Menu && UIManager.instance.currentMenuState == UIManager.MenuState.BeforeStart && PlayerManager.instance.currentPlayerStates == PlayerStates.Idle && Input.GetMouseButtonDown(0))
         {
-            GameManager.instance.SwitchState();
+            GameManager.instance.SwitchGameStates();
             UIManager.instance.SwitchUiState();
         }
 
         if (GameManager.instance.currentGameState == GameManager.GameState.GamePlay && PlayerManager.instance.currentPlayerStates == PlayerStates.Idle && Input.GetMouseButtonDown(0))
         {
-            PlayerManager.instance.SwitchPlayerState();
+            PlayerManager.instance.SwitchPlayerStates();
             OnMouseDown?.Invoke();
             MouseStartPosition = orthographicCamera.ScreenToWorldPoint(Input.mousePosition);
             MouseStartPosition.y = PlayerManager.instance.currentPlayer.transform.position.y;
@@ -64,7 +64,7 @@ public class InputManager : MonoBehaviour
         else if (Input.GetMouseButtonUp(0) && GameManager.instance.currentGameState == GameManager.GameState.GamePlay && PlayerManager.instance.currentPlayerStates == PlayerStates.Running)
         {
             
-            PlayerManager.instance.SwitchPlayerState();
+            PlayerManager.instance.SwitchPlayerStates();
             OnMouseUp?.Invoke();
         }
     }

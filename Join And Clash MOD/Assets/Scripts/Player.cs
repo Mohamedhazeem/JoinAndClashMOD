@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
 
     [Header("Castle Enemy")]
     public CastleEnemy castleEnemy;
+    [Header("Boss Enemy")]
+    public BossEnemy bossEnemy;
     [Header("Enemy Transform")]
     public Transform targetTransform;
 
@@ -88,8 +90,9 @@ public class Player : MonoBehaviour
             else
             {
                 PlayerManager.instance.currentPlayerStates = PlayerStates.Win;
-                Win();
-                PlayerManager.instance.SwitchPlayerState();
+                GameManager.instance.currentGameState = GameManager.GameState.Win;
+                PlayerManager.instance.SwitchPlayerStates();
+                GameManager.instance.SwitchGameStates();
                 isTargetAvailable = false;
             }
         }
@@ -98,8 +101,6 @@ public class Player : MonoBehaviour
     {
         if (PlayerManager.instance.currentPlayerStates == PlayerStates.Running && GameManager.instance.currentGameState == GameManager.GameState.GamePlay)
         {
-            //animator.SetTrigger(Animator.StringToHash("Run"));
-            // animator.ResetTrigger("Idle");
             animator.SetBool(Animator.StringToHash("Idle"), false);
             animator.SetBool(Animator.StringToHash("Run"), true);
         }
@@ -107,7 +108,6 @@ public class Player : MonoBehaviour
         {
             animator.SetBool(Animator.StringToHash("Idle"), false);
             animator.SetBool(Animator.StringToHash("Run"), true);
-           // animator.SetTrigger(Animator.StringToHash("Run"));
         }
     }
     protected virtual void Move()
@@ -126,15 +126,13 @@ public class Player : MonoBehaviour
             animator.SetBool(Animator.StringToHash("Run"), false);
             animator.SetBool(Animator.StringToHash("Idle"), true);
         }
-
     }
     protected void Win()
     {
         if(PlayerManager.instance.currentPlayerStates == PlayerStates.Win)
         {
             animator.SetBool(Animator.StringToHash("Attack"), false);
-            animator.SetBool(Animator.StringToHash("Win"), true);
-            
+            animator.SetBool(Animator.StringToHash("Win"), true);            
         }
     }
     public virtual void CheckHealth()
@@ -146,6 +144,7 @@ public class Player : MonoBehaviour
     }
     protected void AttackAnimation()
     {
+        animator.SetBool(Animator.StringToHash("Idle"), false);
         animator.SetBool(Animator.StringToHash("Attack"), true);
     }
     protected void Die(bool isNpc)
@@ -182,13 +181,27 @@ public class Player : MonoBehaviour
     {
         if (targetTransform != null)
         {
-            castleEnemy.health -= attackPower;
-            if (castleEnemy.health <= 0)
+            if(castleEnemy != null)
             {
-                castleEnemy.CheckHealth();
-                targetTransform = null;
-                castleEnemy = null;
+                castleEnemy.health -= attackPower;
+                if (castleEnemy.health <= 0)
+                {
+                    castleEnemy.CheckHealth();
+                    targetTransform = null;
+                    castleEnemy = null;
+                }
             }
+            else
+            {
+                bossEnemy.health -= attackPower;
+                if (bossEnemy.health <= 0)
+                {
+                    bossEnemy.CheckHealth();
+                    targetTransform = null;
+                    bossEnemy = null;
+                }
+            }
+            
 
         }
     }
@@ -206,10 +219,6 @@ public class Player : MonoBehaviour
             Die(false);
         }
     }
-    //private void OnTriggerEnter(Collider other)
-    //{
-        
-    //}
     private void OnDisable()
     {
         Die(false);
