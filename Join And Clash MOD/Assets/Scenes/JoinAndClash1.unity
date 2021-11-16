@@ -2477,7 +2477,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentEnemyStates: 0
-  enemySpawnTime: 1
+  enemySpawnTime: 0.5
   enemyList: []
   enemyPrefab: {fileID: 7911285091610097054, guid: 33631336168c63a41802e602d525c372, type: 3}
   enemiesSpawnPoint: {fileID: 667978973}
