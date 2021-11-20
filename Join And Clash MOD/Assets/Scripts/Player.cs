@@ -193,8 +193,9 @@ public class Player : MonoBehaviour
             }
             else
             {
-                bossEnemy.health -= attackPower;
-                if (bossEnemy.health <= 0)
+                bossEnemy.CurrentHealth -= attackPower;
+                bossEnemy.HealthBarAnimation();
+                if (bossEnemy.CurrentHealth <= 0)
                 {
                     bossEnemy.CheckHealth();
                     targetTransform = null;
@@ -298,6 +299,7 @@ public class Player : MonoBehaviour
     {
         if(PlayerManager.instance.npc.Count > 0 && !PlayerManager.instance.currentPlayer.activeInHierarchy)
         {
+            Debug.LogError("Error");
             PlayerManager.instance.npc[0].GetComponent<NPCPlayer>().isNextPlayer = true;
             CameraManager.instance.target = PlayerManager.instance.npc[0].transform;
         }

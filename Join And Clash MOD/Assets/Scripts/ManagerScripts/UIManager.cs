@@ -74,8 +74,4 @@ public class UIManager : MonoBehaviour
     {
         SceneSwitchManager.instance.RestartScene();
     }
-    public void SaveLevelData() // save level design
-    {
-        LevelManager.instance.Asign();
-    }
 }

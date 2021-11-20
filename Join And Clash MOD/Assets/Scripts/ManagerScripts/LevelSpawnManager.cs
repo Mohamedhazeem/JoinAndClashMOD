@@ -22,7 +22,7 @@ public class LevelSpawnManager : MonoBehaviour
     }
     private void Start()
     {
-        SpawnLevel();
+       // SpawnLevel();
     }
     public void SpawnLevel()
     {
@@ -40,7 +40,7 @@ public class LevelSpawnManager : MonoBehaviour
                        GameObject gameObject =  ObjectPoolManager.instance.GetObjectFromPool(LevelManager.instance.levelDatas[i].objectsInLevels[j].SceneObjectsName[k]);
 
                        gameObject.transform.position = LevelManager.instance.levelDatas[i].objectsInLevels[j].sceneObjectTransform[k];
-
+                        Debug.Log(gameObject.transform.position);
                         if(gameObject.name == "EnemySpawnPoint")
                         {
                             EnemyManager.instance.enemiesSpawnPoint = gameObject;

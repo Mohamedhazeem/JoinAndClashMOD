@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +9,7 @@ public class ObjectPoolManager : MonoBehaviour
     internal Dictionary<string, Queue<GameObject>> poolDictionary;
     void Awake()
     {
+        
         AssignInstance();
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
@@ -38,20 +38,25 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
     private void AssignObjectForPool()
-    {       
-        for (int i = 0; i < LevelManager.instance.levelDatas.Count; i++)
+    {      
+        
+
+        for (int i = 0; i < LevelManager.TOTALLEVELCOUNT; i++)
         {
             if (UserDataManager.instance.currentLevelCount == i)
             {
-                var count = LevelManager.instance.levelDatas[i].objectsInLevels.Count;
+                var count = LevelManager.instance.levelDatas[0].objectsInLevels.Count;
 
                 for (int j = 0; j < count; j++)
                 {
                     ObjectForPool objectPool = new ObjectForPool();
                     for (int k = 0; k < 1; k++)
                     {
-                        objectPool.prefab = LevelManager.instance.levelDatas[i].objectsInLevels[j].sceneObjects[k];
-                        objectPool.prefabCount = LevelManager.instance.levelDatas[i].objectsInLevels[j].sceneObjects.Count;
+                        var name = LevelManager.instance.levelDatas[0].objectsInLevels[j].SceneObjectsName[k];
+                        var prefab = Resources.Load<GameObject>("Prefabs/Floor");
+                        Debug.Log(prefab.name);
+                        objectPool.prefab = prefab;
+                        objectPool.prefabCount = LevelManager.instance.levelDatas[0].objectsInLevels[j].sceneObjects.Count;
                         objectForPools.Add(objectPool);
                     }                    
                 }

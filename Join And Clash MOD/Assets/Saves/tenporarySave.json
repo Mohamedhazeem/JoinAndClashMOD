@@ -1,0 +1,59 @@
+{
+    "ListItems": [
+        {
+            "name": "Level 0",
+            "objectsInLevels": [
+                {
+                    "name": "Floor",
+                    "sceneObjects": [
+                        {
+                            "instanceID": -1392
+                        },
+                        {
+                            "instanceID": -1554
+                        },
+                        {
+                            "instanceID": -1384
+                        },
+                        {
+                            "instanceID": -1902
+                        },
+                        {
+                            "instanceID": -1716
+                        }
+                    ],
+                    "SceneObjectsName": [
+                        "Floor"
+                    ],
+                    "sceneObjectTransform": [
+                        {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 15.0
+                        },
+                        {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 30.0
+                        },
+                        {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 45.0
+                        },
+                        {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 60.0
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

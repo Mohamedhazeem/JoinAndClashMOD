@@ -58,12 +58,10 @@ public class EnemyManager : MonoBehaviour
     }
     public void SpawnEnemies()
     {
-        var randomNumber = Random.Range(2, 8);
-        if(PlayerManager.instance.npc.Count > 2)
+        var randomNumber = Random.Range(8, 15);
+        if (PlayerManager.instance.npc.Count > 2)
         {
-            var enemyCount = PlayerManager.instance.npc.Count - randomNumber;
-            enemyCount = Mathf.Abs(enemyCount);
-            StartCoroutine(SpawnEnemiesCouroutine(enemyCount));
+            StartCoroutine(SpawnEnemiesCouroutine(randomNumber));         
         }
         else
         {
@@ -72,6 +70,7 @@ public class EnemyManager : MonoBehaviour
     }
     IEnumerator SpawnEnemiesCouroutine(int enemyCount)
     {
+        currentEnemyStates = EnemyStates.Idle;
         while (enemySpawnCount < enemyCount)
         {
             enemySpawnCount++;
@@ -84,27 +83,32 @@ public class EnemyManager : MonoBehaviour
 
             castleEnemy.targetTransform = playerTransform;
             castleEnemy.player = player;
-            currentEnemyStates = EnemyStates.Chase;
+       
 
             player.castleEnemy = castleEnemy;
             player.targetTransform = EnemyTransform();
             player.isTargetAvailable = true;
         }
+
     }
     public void AssignToBoss()
     {
+
         if (PlayerManager.instance.npc.Count >= 0) 
         {
-            bossEnemy.isTargetAvailable = true;
-            var targetTransform = PlayerManager.instance.PlayerAndNPCTransform();
-            var player = targetTransform.GetComponent<Player>();
+            for (int i = 0; i <= PlayerManager.instance.npc.Count; i++)
+            {
+                var targetTransform = PlayerManager.instance.PlayerAndNPCTransform();
+                var player = targetTransform.GetComponent<Player>();
+                bossEnemy.isTargetAvailable = true;
 
-            bossEnemy.targetTransform = targetTransform;
-            bossEnemy.player = player;
+                bossEnemy.targetTransform = targetTransform;
+                bossEnemy.player = player;
 
-            player.targetTransform = bossEnemyTransform;
-            player.bossEnemy = bossEnemy;
-            player.isTargetAvailable = true;
+                player.targetTransform = bossEnemyTransform;
+                player.bossEnemy = bossEnemy;
+                player.isTargetAvailable = true;
+            }
         }
     }
     public Transform EnemyTransform()

@@ -29,7 +29,7 @@ public class CastleEnemy : Enemy
     protected override void Update()
     {
         
-        if (isTargetAvailable)
+        if (isTargetAvailable && EnemyManager.instance.currentEnemyStates == EnemyStates.Chase)
         {
             Chase(targetTransform);           
         }
@@ -58,6 +58,10 @@ public class CastleEnemy : Enemy
             {
                 targetTransform = newTarget;
                 player = targetTransform.GetComponent<Player>();
+
+                player.castleEnemy = this;
+                player.targetTransform = this.transform;
+                player.isTargetAvailable = true;
             }
             else
             {

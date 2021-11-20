@@ -3,7 +3,9 @@ using UnityEngine;
 
 public static class SaveLevelDesign
 {
+    
     public static readonly string path = Application.dataPath + "/Saves/";
+
 
     public static void Init()
     {
@@ -13,14 +15,15 @@ public static class SaveLevelDesign
         }
     }
     public static void Save(string saveString)
-    {
-        File.WriteAllText(path + "jsonsample.json",saveString);
+    {        
+        File.WriteAllText(path + "tenporarySave.json",saveString);
     }
+ 
     public static string Load()
     {
-        if (File.Exists(path + "jsonsample.json"))
+        if (File.Exists(path + "tenporarySave.json"))
         {
-            var s = File.ReadAllText(path + "jsonsample.json");
+            var s = File.ReadAllText(path + "tenporarySave.json");
             return s;
         }
         else
@@ -28,4 +31,5 @@ public static class SaveLevelDesign
             return null;
         }
     }
+
 }

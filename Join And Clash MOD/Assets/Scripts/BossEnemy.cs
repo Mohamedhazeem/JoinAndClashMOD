@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BossEnemy : MonoBehaviour
 {
@@ -18,11 +19,23 @@ public class BossEnemy : MonoBehaviour
     public Player player;
 
     [Header("Health")]
-    public float health;
+    public float CurrentHealth;
+    private float TotalHealth;
 
     [Header("Attack Power")]
     public float attackPower;
 
+    [Header("Health UI Image")]
+    public Image healthImage;
+
+    [Header("Health Text")]
+    public Text healthText;
+
+    private void Start()
+    {
+        TotalHealth = CurrentHealth;
+        healthText.text = CurrentHealth.ToString() ;
+    }
     public void Update()
     {
         if (isTargetAvailable)
@@ -100,10 +113,15 @@ public class BossEnemy : MonoBehaviour
             animator.SetTrigger(Animator.StringToHash("Win"));
         }        
     }
-
+    public void HealthBarAnimation()
+    {
+        healthImage.fillAmount = CurrentHealth / TotalHealth;
+        healthText.text = CurrentHealth.ToString();
+    }
     internal void CheckHealth()
     {
-        if (health <= 0)
+        
+        if (CurrentHealth <= 0)
         {
             Die();
         }

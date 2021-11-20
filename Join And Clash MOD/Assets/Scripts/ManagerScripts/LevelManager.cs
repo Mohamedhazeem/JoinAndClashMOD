@@ -1,19 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance;
-
-    public string Text;
-    public int currentLevelCount;
+    
     public const int TOTALLEVELCOUNT = 2;
 
-    public List<LevelData> levelDatas;
-
+    public List<LevelData> levelDatas = new List<LevelData>();
+    public int levelDataCount;
     void Awake()
     {
+        levelDataCount = levelDatas.Count;
         AssignInstance();
         LoadLevelDesign();
     }
@@ -28,46 +26,35 @@ public class LevelManager : MonoBehaviour
             Destroy(this);
         }
     }
-
-
     private void LoadLevelDesign()
     {
         SaveLevelDesign.Init();
 
-        AssignSceneObjectsName();
-
         string load = SaveLevelDesign.Load();
-
         List<LevelData> data = JsonHelper.ListFromJson<LevelData>(load);
 
         AssignLevelData(data);
-    }
-    public void AssignSceneObjectsName()
-    {
 
-        for (int i = 0; i < levelDatas.Count; i++)
+        levelDataCount = levelDatas.Count;
+    }
+
+    public void AssignLevelData(List<LevelData> data)
+    {
+        for (int i = 0; i < TOTALLEVELCOUNT; i++)
         {
-            for (int j = 0; j < levelDatas[i].objectsInLevels.Count; j++)
+            if(UserDataManager.instance.currentLevelCount == i)
             {
-                levelDatas[i].objectsInLevels[j].AssignSceneObjectsName();
-                levelDatas[i].objectsInLevels[j].AssignSceneObjectsTransform();
+                levelDatas[i] = data[i];
             }
+            
+        }
+    }
+    public void SaveLevelData()
+    {
+        var levelData = JsonHelper.ToJson(levelDatas, true);
+        SaveLevelDesign.Save(levelData);
+    }
 
-        }
-    }
-    public void AssignLevelData (List<LevelData> data)
-    {
-        for (int i = 0; i < levelDatas.Count; i++)
-        {
-            levelDatas[i] = data[i];
-        }
-    }
-    public void Asign()
-    {
-           
-        var v = JsonHelper.ToJson(levelDatas, true);
-        SaveLevelDesign.Save(v);
-    }
 
     [System.Serializable]
     public class LevelData
@@ -86,13 +73,14 @@ public class LevelManager : MonoBehaviour
         public List<Vector3> sceneObjectTransform;
         public void AssignSceneObjectsName()
         {
-            for (int i = 0; i < sceneObjects.Count; i++)
-            {
-                SceneObjectsName.Add(sceneObjects[i].name);
-            }
+            SceneObjectsName.Add(sceneObjects[0].name);
+            //for (int i = 0; i < sceneObjects.Count; i++)
+            //{
+            //    SceneObjectsName.Add(sceneObjects[i].name);
+            //}
         }
         public void AssignSceneObjectsTransform()
-        {
+        {            
             for (int i = 0; i < sceneObjects.Count; i++)
             {
                 sceneObjectTransform.Add(sceneObjects[i].transform.position);
@@ -102,3 +90,4 @@ public class LevelManager : MonoBehaviour
 
 
 }
+

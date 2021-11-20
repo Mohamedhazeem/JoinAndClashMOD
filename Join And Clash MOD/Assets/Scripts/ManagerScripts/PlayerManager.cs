@@ -17,20 +17,25 @@ public class PlayerManager : MonoBehaviour
 
     [Header("Players")]
     [SerializeField]
-    private GameObject player;
+    private GameObject playerPrefab;
     public GameObject currentPlayer;
     public Material playerMaterial;
 
     public PlayerStates currentPlayerStates;
 
     public List<GameObject> npc;
+
     public float enemyrange;
     public LayerMask layerMask;
-
+   
+    public int Count;
+    private int currentCount;
+    private int temporaryCount = 0;
     private void Awake()
     {
         AssignInstance();
-        currentPlayer = Instantiate(player, playerSpawnPoint.position, Quaternion.identity);      
+        currentPlayer = Instantiate(playerPrefab, playerSpawnPoint.position, Quaternion.identity);      
+
     }
     private void AssignInstance()
     {
@@ -89,14 +94,29 @@ public class PlayerManager : MonoBehaviour
     public Transform PlayerAndNPCTransform()
     {
         if (npc.Count > 0 && currentPlayer.activeInHierarchy)
-        {          
+        {
             if (!npc.Contains(currentPlayer))
             {
                 npc.Add(currentPlayer);
             }
+            Count = npc.Count;
+            Debug.Log(Count);
+            if (temporaryCount < Count)
+            {
+                currentCount = Count - temporaryCount;
+                Debug.Log(currentCount);
+                temporaryCount++;
+            }
+            else
+            {
+                temporaryCount = 0;
+                currentCount = Count - temporaryCount;
+                temporaryCount++;
+            }
             
-            var transform = Random.Range(0, npc.Count);
-            return npc[transform].transform;            
+            var transform = Random.Range(0, currentCount);
+
+            return npc[currentCount-1].transform;            
         }
         else if (npc.Count > 0 && !currentPlayer.activeInHierarchy)
         {
