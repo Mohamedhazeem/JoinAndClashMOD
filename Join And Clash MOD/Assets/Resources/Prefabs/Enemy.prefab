@@ -1020,6 +1020,7 @@ GameObject:
   - component: {fileID: 7489100646985895721}
   - component: {fileID: 5259353704471419896}
   - component: {fileID: 9062896862019846470}
+  - component: {fileID: 9176235474431761019}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Enemy
@@ -1051,7 +1052,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7911285091610097054}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 6c8ac8628ba785147adae213aaf9aecc, type: 3}
   m_Controller: {fileID: 9100000, guid: d7c36e6acb5b48f4b9ade6a0f1530b26, type: 2}
   m_CullingMode: 1
@@ -1105,6 +1106,23 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 2
   m_Center: {x: 0, y: 2, z: 0}
+--- !u!114 &9176235474431761019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7911285091610097054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56dc206a48818d84fa9576aa219ba1aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 3486203479822628190}
+  capsuleCollider: {fileID: 5259353704471419896}
+  capsuleColliderHeight: 0
+  moveSpeed: 5
+  isMove: 0
 --- !u!1 &7930538422222100165
 GameObject:
   m_ObjectHideFlags: 0

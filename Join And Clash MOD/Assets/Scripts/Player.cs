@@ -175,8 +175,16 @@ public class Player : MonoBehaviour
             ChooseNextPlayer();
             isPlayerDead = true;
         }
-       
+
+        if (isPlayerDead && PlayerManager.instance.npc.Count <= 0) 
+        {
+            EnemyManager.instance.currentEnemyStates = EnemyStates.Win;
+            GameManager.instance.currentGameState = GameManager.GameState.Lose;
+            EnemyManager.instance.SwitchEnemyStates();
+            GameManager.instance.SwitchGameStates();
+        }
     }
+    
     public virtual void Attack()
     {
         if (targetTransform != null)
@@ -202,8 +210,6 @@ public class Player : MonoBehaviour
                     bossEnemy = null;
                 }
             }
-            
-
         }
     }
     protected virtual void PlayerSideMoves(float x)

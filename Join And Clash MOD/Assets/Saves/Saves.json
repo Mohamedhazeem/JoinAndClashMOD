@@ -4,24 +4,31 @@
             "name": "Level 0",
             "objectsInLevels": [
                 {
-                    "name": "Floor",
+                    "name": "Floors",
                     "sceneObjects": [
                         {
-                            "instanceID": -1392
+                            "instanceID": 16600
                         },
                         {
-                            "instanceID": -1554
+                            "instanceID": 16770
                         },
                         {
-                            "instanceID": -1384
+                            "instanceID": 16598
                         },
                         {
-                            "instanceID": -1902
+                            "instanceID": 16746
+                        },
+                        {
+                            "instanceID": 16590
+                        },
+                        {
+                            "instanceID": 16636
+                        },
+                        {
+                            "instanceID": 16542
                         }
                     ],
-                    "SceneObjectsName": [
-                        "Floor"
-                    ],
+                    "SceneObjectName": "Floor",
                     "sceneObjectTransform": [
                         {
                             "x": 0.0,
@@ -42,11 +49,351 @@
                             "x": 0.0,
                             "y": 0.0,
                             "z": 45.0
+                        },
+                        {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 60.0
+                        },
+                        {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 75.0
+                        },
+                        {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 90.0
+                        }
+                    ]
+                },
+                {
+                    "name": "Enemies",
+                    "sceneObjects": [
+                        {
+                            "instanceID": 16762
+                        },
+                        {
+                            "instanceID": 16516
+                        }
+                    ],
+                    "SceneObjectName": "Enemy",
+                    "sceneObjectTransform": [
+                        {
+                            "x": 2.5,
+                            "y": 0.3559989929199219,
+                            "z": 51.709999084472659
+                        },
+                        {
+                            "x": -1.9799995422363282,
+                            "y": 0.3559989929199219,
+                            "z": 41.18000030517578
+                        }
+                    ]
+                },
+                {
+                    "name": "Boss Enemy",
+                    "sceneObjects": [
+                        {
+                            "instanceID": 16744
+                        }
+                    ],
+                    "SceneObjectName": "BossEnemy",
+                    "sceneObjectTransform": [
+                        {
+                            "x": 0.0,
+                            "y": 0.25,
+                            "z": 102.37000274658203
+                        }
+                    ]
+                },
+                {
+                    "name": "Wall",
+                    "sceneObjects": [
+                        {
+                            "instanceID": 16606
+                        }
+                    ],
+                    "SceneObjectName": "Door",
+                    "sceneObjectTransform": [
+                        {
+                            "x": 0.0,
+                            "y": 2.750000476837158,
+                            "z": 108.0
+                        }
+                    ]
+                },
+                {
+                    "name": "NPC",
+                    "sceneObjects": [
+                        {
+                            "instanceID": 16552
+                        },
+                        {
+                            "instanceID": 16588
+                        },
+                        {
+                            "instanceID": 16562
+                        },
+                        {
+                            "instanceID": 16526
+                        },
+                        {
+                            "instanceID": 16676
+                        }
+                    ],
+                    "SceneObjectName": "Character",
+                    "sceneObjectTransform": [
+                        {
+                            "x": 3.359999895095825,
+                            "y": 0.25,
+                            "z": 94.79000091552735
+                        },
+                        {
+                            "x": -2.0199999809265138,
+                            "y": 0.25,
+                            "z": 95.0
+                        },
+                        {
+                            "x": -0.6899999976158142,
+                            "y": 0.25,
+                            "z": 95.0
+                        },
+                        {
+                            "x": 0.7400000095367432,
+                            "y": 0.25,
+                            "z": 95.0
+                        },
+                        {
+                            "x": 2.0899999141693117,
+                            "y": 0.25,
+                            "z": 95.0
+                        }
+                    ]
+                },
+                {
+                    "name": "Player Spawn Point",
+                    "sceneObjects": [
+                        {
+                            "instanceID": 16764
+                        }
+                    ],
+                    "SceneObjectName": "PlayerSpawnPoint",
+                    "sceneObjectTransform": [
+                        {
+                            "x": 0.0,
+                            "y": 0.5,
+                            "z": 0.0
+                        }
+                    ]
+                },
+                {
+                    "name": "Enemy Spawn Point",
+                    "sceneObjects": [
+                        {
+                            "instanceID": 16664
+                        }
+                    ],
+                    "SceneObjectName": "EnemySpawnPoint",
+                    "sceneObjectTransform": [
+                        {
+                            "x": 0.0,
+                            "y": 0.5,
+                            "z": 110.0
+                        }
+                    ]
+                },
+                {
+                    "name": "Climax Floor",
+                    "sceneObjects": [
+                        {
+                            "instanceID": 16772
+                        }
+                    ],
+                    "SceneObjectName": "ClimaxFloor",
+                    "sceneObjectTransform": [
+                        {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 110.0
+                        }
+                    ]
+                },
+                {
+                    "name": "Enemy Trigger",
+                    "sceneObjects": [
+                        {
+                            "instanceID": -12666
+                        }
+                    ],
+                    "SceneObjectName": "EnemyTrigger",
+                    "sceneObjectTransform": [
+                        {
+                            "x": 0.4000000059604645,
+                            "y": 1.5,
+                            "z": 99.0
+                        }
+                    ]
+                }
+            ]
+        },
+
+        {
+            "name": "Level 0",
+            "objectsInLevels": [
+                {
+                    "name": "Floors",
+                    "sceneObjects": [
+                        {
+                            "instanceID": 16600
+                        },
+                        {
+                            "instanceID": 16768
+                        },
+                        {
+                            "instanceID": 16598
+                        }
+                    ],
+                    "SceneObjectName": "Floor",
+                    "sceneObjectTransform": [
+                        {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 15.0
+                        },
+                        {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 30.0
+                        }
+                    ]
+                },
+                {
+                    "name": "Climax Floor",
+                    "sceneObjects": [
+                        {
+                            "instanceID": 16770
+                        }
+                    ],
+                    "SceneObjectName": "ClimaxFloor",
+                    "sceneObjectTransform": [
+                        {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 49.88999938964844
+                        }
+                    ]
+                },
+                {
+                    "name": "Cylinder with Spikes",
+                    "sceneObjects": [
+                        {
+                            "instanceID": -24868
+                        },
+                        {
+                            "instanceID": -25028
+                        }
+                    ],
+                    "SceneObjectName": "CylinderWithSpikes",
+                    "sceneObjectTransform": [
+                        {
+                            "x": 2.7539100646972658,
+                            "y": 1.000000238418579,
+                            "z": 9.913591384887696
+                        },
+                        {
+                            "x": -3.1700000762939455,
+                            "y": 1.0,
+                            "z": 16.540000915527345
+                        }
+                    ]
+                },
+                {
+                    "name": "Enemy",
+                    "sceneObjects": [
+                        {
+                            "instanceID": -25754
+                        }
+                    ],
+                    "SceneObjectName": "Enemy",
+                    "sceneObjectTransform": [
+                        {
+                            "x": 2.420562744140625,
+                            "y": 0.25,
+                            "z": 17.115020751953126
+                        }
+                    ]
+                },
+                {
+                    "name": "Door",
+                    "sceneObjects": [
+                        {
+                            "instanceID": -21118
+                        }
+                    ],
+                    "SceneObjectName": "Door",
+                    "sceneObjectTransform": [
+                        {
+                            "x": -0.07000000029802323,
+                            "y": 2.690000057220459,
+                            "z": 46.470001220703128
+                        }
+                    ]
+                },
+                {
+                    "name": "Player Spawn Point",
+                    "sceneObjects": [
+                        {
+                            "instanceID": -26004
+                        }
+                    ],
+                    "SceneObjectName": "PlayerSpawnPoint",
+                    "sceneObjectTransform": [
+                        {
+                            "x": 0.0,
+                            "y": 0.5,
+                            "z": 0.0
+                        }
+                    ]
+                },
+                {
+                    "name": "Enemy Spawn Point",
+                    "sceneObjects": [
+                        {
+                            "instanceID": -24102
+                        }
+                    ],
+                    "SceneObjectName": "EnemySpawnPoint",
+                    "sceneObjectTransform": [
+                        {
+                            "x": 0.0,
+                            "y": 0.5,
+                            "z": 50.0
+                        }
+                    ]
+                },
+                {
+                    "name": "Enemy Trigger",
+                    "sceneObjects": [
+                        {
+                            "instanceID": -23556
+                        }
+                    ],
+                    "SceneObjectName": "EnemyTrigger",
+                    "sceneObjectTransform": [
+                        {
+                            "x": -1.100000023841858,
+                            "y": 1.4800000190734864,
+                            "z": 38.630001068115237
                         }
                     ]
                 }
             ]
         }
-
     ]
 }

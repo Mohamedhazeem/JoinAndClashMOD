@@ -7,11 +7,11 @@ public class LevelManager : MonoBehaviour
     
     public const int TOTALLEVELCOUNT = 2;
 
-    public List<LevelData> levelDatas = new List<LevelData>();
-    public int levelDataCount;
+    public List<LevelData> levelDatas;
+    [HideInInspector]
+    public List<LevelData> data;
     void Awake()
     {
-        levelDataCount = levelDatas.Count;
         AssignInstance();
         LoadLevelDesign();
     }
@@ -29,13 +29,13 @@ public class LevelManager : MonoBehaviour
     private void LoadLevelDesign()
     {
         SaveLevelDesign.Init();
+        AssignSceneObjectsNameAndTransform();
 
         string load = SaveLevelDesign.Load();
-        List<LevelData> data = JsonHelper.ListFromJson<LevelData>(load);
 
-        AssignLevelData(data);
+        data = JsonHelper.ListFromJson<LevelData>(load);
 
-        levelDataCount = levelDatas.Count;
+        //AssignLevelData(data);
     }
 
     public void AssignLevelData(List<LevelData> data)
@@ -54,7 +54,16 @@ public class LevelManager : MonoBehaviour
         var levelData = JsonHelper.ToJson(levelDatas, true);
         SaveLevelDesign.Save(levelData);
     }
-
+    public void AssignSceneObjectsNameAndTransform()
+    {
+        for (int i = 0; i < levelDatas.Count; i++)
+        {
+            for (int j = 0; j < levelDatas[i].objectsInLevels.Count; j++)
+            {
+                levelDatas[i].objectsInLevels[j].AssignSceneObjectsTransform();
+            }
+        }
+    }
 
     [System.Serializable]
     public class LevelData
@@ -69,16 +78,9 @@ public class LevelManager : MonoBehaviour
     {
         public string name;
         public List<GameObject> sceneObjects;
-        public List<string> SceneObjectsName;
+        public string SceneObjectName;
         public List<Vector3> sceneObjectTransform;
-        public void AssignSceneObjectsName()
-        {
-            SceneObjectsName.Add(sceneObjects[0].name);
-            //for (int i = 0; i < sceneObjects.Count; i++)
-            //{
-            //    SceneObjectsName.Add(sceneObjects[i].name);
-            //}
-        }
+
         public void AssignSceneObjectsTransform()
         {            
             for (int i = 0; i < sceneObjects.Count; i++)

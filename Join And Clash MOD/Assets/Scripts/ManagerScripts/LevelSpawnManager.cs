@@ -22,24 +22,25 @@ public class LevelSpawnManager : MonoBehaviour
     }
     private void Start()
     {
-       // SpawnLevel();
+       SpawnLevel();
     }
     public void SpawnLevel()
     {
-        for (int i = 0; i < LevelManager.instance.levelDatas.Count; i++)
+        //LevelManager.instance.levelDatas.Count
+        for (int i = 0; i < LevelManager.instance.data.Count; i++)
         { 
             if (UserDataManager.instance.currentLevelCount == i)
             {
-                var count = LevelManager.instance.levelDatas[i].objectsInLevels.Count;
+                var count = LevelManager.instance.data[i].objectsInLevels.Count;
 
                 for (int j = 0; j < count; j++)
                 {
 
-                    for (int k = 0; k < LevelManager.instance.levelDatas[i].objectsInLevels[j].sceneObjects.Count; k++)
+                    for (int k = 0; k < LevelManager.instance.data[i].objectsInLevels[j].sceneObjects.Count; k++)
                     {
-                       GameObject gameObject =  ObjectPoolManager.instance.GetObjectFromPool(LevelManager.instance.levelDatas[i].objectsInLevels[j].SceneObjectsName[k]);
+                       GameObject gameObject =  ObjectPoolManager.instance.GetObjectFromPool(LevelManager.instance.data[i].objectsInLevels[j].SceneObjectName);
 
-                       gameObject.transform.position = LevelManager.instance.levelDatas[i].objectsInLevels[j].sceneObjectTransform[k];
+                       gameObject.transform.position = LevelManager.instance.data[i].objectsInLevels[j].sceneObjectTransform[k];
                         Debug.Log(gameObject.transform.position);
                         if(gameObject.name == "EnemySpawnPoint")
                         {

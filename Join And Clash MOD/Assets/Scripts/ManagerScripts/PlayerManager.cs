@@ -34,9 +34,10 @@ public class PlayerManager : MonoBehaviour
     private void Awake()
     {
         AssignInstance();
-        currentPlayer = Instantiate(playerPrefab, playerSpawnPoint.position, Quaternion.identity);      
+       
 
     }
+    
     private void AssignInstance()
     {
         if (instance == null)
@@ -50,6 +51,11 @@ public class PlayerManager : MonoBehaviour
     }
     private void Start()
     {
+        if (playerSpawnPoint != null)
+        {
+            currentPlayer = Instantiate(playerPrefab, playerSpawnPoint.position, Quaternion.identity);
+        }
+
         currentPlayerStates = PlayerStates.Idle;
     }
   

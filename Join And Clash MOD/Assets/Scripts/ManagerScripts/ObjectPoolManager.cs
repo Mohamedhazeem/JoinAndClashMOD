@@ -38,25 +38,30 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
     private void AssignObjectForPool()
-    {      
-        
-
-        for (int i = 0; i < LevelManager.TOTALLEVELCOUNT; i++)
+    {
+       
+        for (int i = 0; i < LevelManager.instance.data.Count; i++)
         {
+            Debug.Log(LevelManager.instance.data.Count);
+            Debug.Log(UserDataManager.instance.currentLevelCount);
+            Debug.Log(i);
             if (UserDataManager.instance.currentLevelCount == i)
             {
-                var count = LevelManager.instance.levelDatas[0].objectsInLevels.Count;
+                Debug.Log(UserDataManager.instance.currentLevelCount == i);
+                var count = LevelManager.instance.data[i].objectsInLevels.Count;
 
                 for (int j = 0; j < count; j++)
                 {
                     ObjectForPool objectPool = new ObjectForPool();
                     for (int k = 0; k < 1; k++)
                     {
-                        var name = LevelManager.instance.levelDatas[0].objectsInLevels[j].SceneObjectsName[k];
-                        var prefab = Resources.Load<GameObject>("Prefabs/Floor");
+                        
+                        var name = LevelManager.instance.data[i].objectsInLevels[j].SceneObjectName;
+                        Debug.Log(name);
+                        var prefab = Resources.Load<GameObject>("Prefabs/"+ name);
                         Debug.Log(prefab.name);
                         objectPool.prefab = prefab;
-                        objectPool.prefabCount = LevelManager.instance.levelDatas[0].objectsInLevels[j].sceneObjects.Count;
+                        objectPool.prefabCount = LevelManager.instance.data[i].objectsInLevels[j].sceneObjects.Count;
                         objectForPools.Add(objectPool);
                     }                    
                 }
@@ -76,6 +81,7 @@ public class ObjectPoolManager : MonoBehaviour
                 gameObject.SetActive(false);
                 poolQueue.Enqueue(gameObject);
             }
+            Debug.Log(objectPool.prefab);
             poolDictionary.Add(objectPool.prefab.name, poolQueue);
         }
     }

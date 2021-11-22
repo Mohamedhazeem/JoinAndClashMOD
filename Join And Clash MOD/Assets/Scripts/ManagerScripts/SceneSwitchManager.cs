@@ -27,12 +27,12 @@ public class SceneSwitchManager : MonoBehaviour
     {
         if(UserDataManager.instance.currentLevelCount < LevelManager.TOTALLEVELCOUNT)
         {
-            SceneManager.LoadScene(UserDataManager.instance.currentLevelCount);
+            SceneManager.LoadScene(0);
         }
         else
         {
             UserDataManager.instance.ResetCurrentLevelCount();
-            SceneManager.LoadScene(UserDataManager.instance.currentLevelCount);
+            SceneManager.LoadScene(0);
         }
        
     }

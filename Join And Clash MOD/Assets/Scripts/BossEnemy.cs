@@ -34,7 +34,8 @@ public class BossEnemy : MonoBehaviour
     private void Start()
     {
         TotalHealth = CurrentHealth;
-        healthText.text = CurrentHealth.ToString() ;
+        healthText.text = CurrentHealth.ToString();
+        PlayerManager.instance.OnClimaxWinAnimation += Win;
     }
     public void Update()
     {
@@ -115,7 +116,12 @@ public class BossEnemy : MonoBehaviour
     }
     public void HealthBarAnimation()
     {
-        healthImage.fillAmount = CurrentHealth / TotalHealth;
+        float health = CurrentHealth / TotalHealth;
+        if (health <= 0)
+        {
+            health = 0;
+        }
+        healthImage.fillAmount = health;
         healthText.text = CurrentHealth.ToString();
     }
     internal void CheckHealth()

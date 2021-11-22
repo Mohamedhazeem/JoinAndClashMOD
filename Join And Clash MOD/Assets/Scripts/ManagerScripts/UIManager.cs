@@ -64,7 +64,7 @@ public class UIManager : MonoBehaviour
     }
     public void RestartSceneButtonSetActive()
     {
-        restartButton.SetActive(true);
+        restartButton.SetActive(true); 
     }
     public void NextScene()
     {
